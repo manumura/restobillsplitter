@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
+
 class GuestModel {
   GuestModel({
     this.uuid,
-    this.name,
+    @required this.name,
   }) : assert(name != null);
 
   String uuid;
@@ -12,10 +14,10 @@ class GuestModel {
       identical(this, other) ||
       other is GuestModel &&
           runtimeType == other.runtimeType &&
-          name == other.name;
+          uuid == other.uuid;
 
   @override
-  int get hashCode => name.hashCode;
+  int get hashCode => uuid.hashCode;
 
   @override
   String toString() {

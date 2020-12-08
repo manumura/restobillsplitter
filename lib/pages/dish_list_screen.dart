@@ -3,38 +3,38 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
-import 'package:restobillsplitter/models/guest_model.dart';
-import 'package:restobillsplitter/pages/guest_list_tile.dart';
+import 'package:restobillsplitter/models/dish_model.dart';
+import 'package:restobillsplitter/pages/dish_list_tile.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
-class GuestListScreen extends HookWidget {
-  static const String routeName = '/guest_list';
+class DishListScreen extends HookWidget {
+  static const String routeName = '/dish_list';
 
   @override
   Widget build(BuildContext context) {
     final BillModel bill = useProvider(billStateNotifierProvider.state);
-    final List<GuestModel> guests = bill.guests;
+    final List<DishModel> dishes = bill.dishes;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Guests'),
+        title: const Text('Dishes'),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         actions: <Widget>[
           _buildAddGuestButton(context),
         ],
       ),
-      body: guests.isEmpty
+      body: dishes.isEmpty
           ? const Center(
-              child: Text('Please add a guest'),
+              child: Text('Please add a dish'),
             )
           : ListView.separated(
               padding: const EdgeInsets.all(10.0),
               itemBuilder: (BuildContext context, int index) {
-                final GuestModel guest = guests[index];
-                return GuestListTile(
-                    key: ValueKey<String>(guest.uuid), guest: guest);
+                final DishModel dish = dishes[index];
+                return DishListTile(
+                    key: ValueKey<String>(dish.uuid), dish: dish);
               },
-              itemCount: guests.length,
+              itemCount: dishes.length,
               separatorBuilder: (BuildContext context, int index) =>
                   const SizedBox(),
             ),
@@ -70,13 +70,13 @@ class GuestListScreen extends HookWidget {
           },
         ),
       ),
-      onPressed: () => _addGuest(context),
+      onPressed: () => _addDish(context),
     );
   }
 
-  void _addGuest(BuildContext context) {
+  void _addDish(BuildContext context) {
     final BillStateNotifier billStateNotifier =
         context.read(billStateNotifierProvider);
-    billStateNotifier.addGuest();
+    billStateNotifier.addDish();
   }
 }
