@@ -3,10 +3,10 @@ import 'package:restobillsplitter/models/guest_model.dart';
 
 class DishModel {
   DishModel({
-    this.uuid,
+    @required this.uuid,
     @required this.name,
     @required this.price,
-  }) : assert(name != null && price != null);
+  }) : assert(uuid != null && name != null && price != null);
 
   String uuid;
   String name;

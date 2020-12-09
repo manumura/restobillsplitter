@@ -1,4 +1,6 @@
+import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/all.dart';
+import 'package:random_color/random_color.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
@@ -16,8 +18,20 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     final Uuid uuid = Uuid();
     // TODO
     final int nextIndex = state.guests.length + 1;
+    final RandomColor randomColor = RandomColor();
+    final Color color = randomColor.randomColor(
+      colorHue: ColorHue.multiple(
+        colorHues: [
+          ColorHue.red,
+          ColorHue.blue,
+          ColorHue.green,
+          ColorHue.yellow,
+        ],
+      ),
+    );
     final GuestModel guestToAdd =
-        GuestModel(uuid: uuid.v4(), name: 'Guest$nextIndex');
+        GuestModel(uuid: uuid.v4(), name: 'Guest$nextIndex', color: color);
+    print('guest to add : $guestToAdd');
     state = state..guests.add(guestToAdd);
   }
 
@@ -28,6 +42,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
           GuestModel(
             uuid: guest.uuid,
             name: guest.name,
+            color: guest.color,
           )
         else
           g,

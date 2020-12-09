@@ -36,7 +36,7 @@ class DishListScreen extends HookWidget {
               },
               itemCount: dishes.length,
               separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(),
+                  const Divider(),
             ),
       // bottomNavigationBar: BottomAppBar(
       //   shape: const CircularNotchedRectangle(),

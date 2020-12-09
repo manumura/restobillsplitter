@@ -71,9 +71,14 @@ class _GuestListTileState extends State<GuestListTile> {
           onTap: _deleteGuest,
         ),
       ],
-      child: ListTile(
-        title: _buildNameTextField(widget.guest),
-        // trailing: _buildEditButton(context, category),
+      child: Flex(
+        direction: Axis.horizontal,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Flexible(
+            child: _buildNameTextField(widget.guest),
+          ),
+        ],
       ),
     );
   }
@@ -86,6 +91,7 @@ class _GuestListTileState extends State<GuestListTile> {
       textInputAction: TextInputAction.done,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
+          isDense: true,
           prefixIcon: const Padding(
             padding: EdgeInsets.only(left: 5.0),
             child: Icon(
@@ -102,8 +108,11 @@ class _GuestListTileState extends State<GuestListTile> {
                     Icons.clear,
                   )),
           labelText: 'Name',
-          contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+          contentPadding: const EdgeInsets.all(8.0),
+          border: const OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: guest.color),
+          ),
           filled: true,
           fillColor: Colors.white),
       onChanged: (String value) {
@@ -121,7 +130,8 @@ class _GuestListTileState extends State<GuestListTile> {
   void _editGuestName(String name) {
     print('lost focus: $name');
     billStateNotifier.editGuest(
-      GuestModel(uuid: widget.guest.uuid, name: name),
+      GuestModel(
+          uuid: widget.guest.uuid, name: name, color: widget.guest.color),
     );
   }
 

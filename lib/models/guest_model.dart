@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 
 class GuestModel {
   GuestModel({
-    this.uuid,
+    @required this.uuid,
     @required this.name,
-  }) : assert(name != null);
+    @required this.color,
+  }) : assert(uuid != null && name != null && color != null);
 
   String uuid;
   String name;
+  Color color;
 
   @override
   bool operator ==(Object other) =>
@@ -21,6 +24,6 @@ class GuestModel {
 
   @override
   String toString() {
-    return 'GuestModel{uuid: $uuid, name: $name}';
+    return 'GuestModel{uuid: $uuid, name: $name, color: $color}';
   }
 }
