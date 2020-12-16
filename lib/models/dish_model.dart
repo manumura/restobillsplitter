@@ -2,11 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 
 class DishModel {
-  DishModel({
-    @required this.uuid,
-    @required this.name,
-    @required this.price,
-  }) : assert(uuid != null && name != null && price != null);
+  DishModel({@required this.uuid, @required this.name, this.price, this.guest})
+      : assert(uuid != null && name != null);
 
   String uuid;
   String name;
@@ -25,6 +22,6 @@ class DishModel {
 
   @override
   String toString() {
-    return 'DishModel{uuid: $uuid, name: $name, price: $price}';
+    return 'DishModel{uuid: $uuid, name: $name, price: $price, guest: $guest}';
   }
 }

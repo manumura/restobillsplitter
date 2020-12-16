@@ -76,6 +76,16 @@ class _GuestListTileState extends State<GuestListTile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Flexible(
+            flex: 3,
+            child: CircleAvatar(
+              backgroundColor: widget.guest.color ?? Colors.black,
+            ),
+          ),
+          const Spacer(
+            flex: 1,
+          ),
+          Flexible(
+            flex: 18,
             child: _buildNameTextField(widget.guest),
           ),
         ],
@@ -91,30 +101,33 @@ class _GuestListTileState extends State<GuestListTile> {
       textInputAction: TextInputAction.done,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
-          isDense: true,
-          prefixIcon: const Padding(
-            padding: EdgeInsets.only(left: 5.0),
-            child: Icon(
-              Icons.perm_identity,
-            ),
+        isDense: true,
+        prefixIcon: Padding(
+          padding: const EdgeInsets.only(left: 5.0),
+          child: Icon(
+            Icons.account_box,
+            color: guest.color,
           ),
-          suffixIcon: !_isNameClearVisible
-              ? const SizedBox()
-              : IconButton(
-                  onPressed: () {
-                    _nameTextController.clear();
-                  },
-                  icon: const Icon(
-                    Icons.clear,
-                  )),
-          labelText: 'Name',
-          contentPadding: const EdgeInsets.all(8.0),
-          border: const OutlineInputBorder(),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: guest.color),
-          ),
-          filled: true,
-          fillColor: Colors.white),
+        ),
+        suffixIcon: !_isNameClearVisible
+            ? const SizedBox()
+            : IconButton(
+                onPressed: () {
+                  _nameTextController.clear();
+                },
+                icon: Icon(
+                  Icons.clear,
+                  color: guest.color,
+                )),
+        labelText: 'Name',
+        contentPadding: const EdgeInsets.all(8.0),
+        border: const OutlineInputBorder(),
+        // enabledBorder: OutlineInputBorder(
+        //   borderSide: BorderSide(color: guest.color),
+        // ),
+        filled: true,
+        fillColor: Colors.white,
+      ),
       onChanged: (String value) {
         // TODO
         print('changed');

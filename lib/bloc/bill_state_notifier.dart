@@ -16,12 +16,12 @@ class BillStateNotifier extends StateNotifier<BillModel> {
 
   void addGuest() {
     final Uuid uuid = Uuid();
-    // TODO
-    final int nextIndex = state.guests.length + 1;
     final RandomColor randomColor = RandomColor();
     final Color color = randomColor.randomColor(
+      colorSaturation: ColorSaturation.mediumSaturation,
+      colorBrightness: ColorBrightness.primary,
       colorHue: ColorHue.multiple(
-        colorHues: [
+        colorHues: <ColorHue>[
           ColorHue.red,
           ColorHue.blue,
           ColorHue.green,
@@ -29,6 +29,8 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         ],
       ),
     );
+    // TODO
+    final int nextIndex = state.guests.length + 1;
     final GuestModel guestToAdd =
         GuestModel(uuid: uuid.v4(), name: 'Guest$nextIndex', color: color);
     print('guest to add : $guestToAdd');
@@ -63,7 +65,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     // TODO
     final int nextIndex = state.dishes.length + 1;
     final DishModel dishToAdd =
-        DishModel(uuid: uuid.v4(), name: 'Dish$nextIndex', price: 0.0);
+        DishModel(uuid: uuid.v4(), name: 'Dish$nextIndex');
     state = state..dishes.add(dishToAdd);
   }
 
@@ -75,6 +77,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
             uuid: dish.uuid,
             name: dish.name,
             price: dish.price,
+            guest: dish.guest,
           )
         else
           d,

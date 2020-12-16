@@ -39,12 +39,13 @@ class _DishListTileState extends State<DishListTile> {
   void initState() {
     super.initState();
     _nameTextController.addListener(_toggleNameClearVisible);
-    _nameTextController.text = (widget.dish == null) ? '' : widget.dish.name;
+    _nameTextController.text =
+        (widget.dish?.name == null) ? '' : widget.dish.name;
     _nameFocusNode.addListener(_editDishName);
 
     _priceTextController.addListener(_togglePriceClearVisible);
     _priceTextController.text =
-        (widget.dish == null) ? '' : widget.dish.price.toString();
+        (widget.dish?.price == null) ? '' : widget.dish.price.toString();
     _priceFocusNode.addListener(_editDishPrice);
 
     billStateNotifier = context.read(billStateNotifierProvider);
@@ -218,7 +219,10 @@ class _DishListTileState extends State<DishListTile> {
 
   Widget _buildSelectGuestButton(BuildContext context, DishModel dish) {
     return IconButton(
-      icon: const Icon(FontAwesomeIcons.userEdit),
+      icon: Icon(
+        FontAwesomeIcons.userEdit,
+        color: dish.guest != null ? dish.guest.color : Colors.black,
+      ),
       onPressed: () {
         // TODO
         showDialog<AlertDialog>(

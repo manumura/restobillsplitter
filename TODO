@@ -1,2 +1,3 @@
 // guests (names) -> dishes (affect to a guest or split equally) -> summary
 // screen 1 : number of guests + number of dishes + tax + split tax equally switch
+// Dish : split equally
