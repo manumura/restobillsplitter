@@ -6,13 +6,20 @@ class BillModel {
   BillModel({
     @required this.guests,
     @required this.dishes,
-  }) : assert(guests != null && dishes != null);
+    @required this.tax,
+    @required this.isSplitTaxEqually,
+  }) : assert(guests != null &&
+            dishes != null &&
+            tax != null &&
+            isSplitTaxEqually != null);
 
   List<GuestModel> guests;
   List<DishModel> dishes;
+  double tax;
+  bool isSplitTaxEqually;
 
   @override
   String toString() {
-    return 'BillModel{guests: $guests, dishes:$dishes}';
+    return 'BillModel{guests: $guests, dishes:$dishes, tax: $tax, isSplitTaxEqually: $isSplitTaxEqually}';
   }
 }

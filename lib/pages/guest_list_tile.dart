@@ -23,21 +23,22 @@ class GuestListTile extends StatefulHookWidget {
 class _GuestListTileState extends State<GuestListTile> {
   final Logger logger = getLogger();
 
+  BillStateNotifier billStateNotifier;
+
   final TextEditingController _nameTextController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
   bool _isNameClearVisible = false;
 
-  BillStateNotifier billStateNotifier;
-
   @override
   void initState() {
     super.initState();
+
+    billStateNotifier = context.read(billStateNotifierProvider);
+
     _nameTextController.addListener(_toggleNameClearVisible);
     _nameTextController.text = (widget.guest == null) ? '' : widget.guest.name;
 
     _nameFocusNode.addListener(_editGuest);
-
-    billStateNotifier = context.read(billStateNotifierProvider);
   }
 
   @override
@@ -119,14 +120,15 @@ class _GuestListTileState extends State<GuestListTile> {
                   Icons.clear,
                   // color: guest.color,
                 )),
-        labelText: 'Name',
         contentPadding: const EdgeInsets.all(8.0),
-        border: const OutlineInputBorder(),
+        // border: const OutlineInputBorder(),
         // enabledBorder: OutlineInputBorder(
         //   borderSide: BorderSide(color: guest.color),
         // ),
         filled: true,
         fillColor: Colors.white,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        labelText: 'Name',
       ),
       onChanged: (String value) {
         // TODO

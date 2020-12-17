@@ -27,6 +27,8 @@ class DishListTile extends StatefulHookWidget {
 class _DishListTileState extends State<DishListTile> {
   final Logger logger = getLogger();
 
+  BillStateNotifier billStateNotifier;
+
   final TextEditingController _nameTextController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
   bool _isNameClearVisible = false;
@@ -35,11 +37,12 @@ class _DishListTileState extends State<DishListTile> {
   final FocusNode _priceFocusNode = FocusNode();
   bool _isPriceClearVisible = false;
 
-  BillStateNotifier billStateNotifier;
-
   @override
   void initState() {
     super.initState();
+
+    billStateNotifier = context.read(billStateNotifierProvider);
+
     _nameTextController.addListener(_toggleNameClearVisible);
     _nameTextController.text =
         (widget.dish?.name == null) ? '' : widget.dish.name;
@@ -49,8 +52,6 @@ class _DishListTileState extends State<DishListTile> {
     _priceTextController.text =
         (widget.dish?.price == null) ? '' : widget.dish.price.toString();
     _priceFocusNode.addListener(_editDishPrice);
-
-    billStateNotifier = context.read(billStateNotifierProvider);
   }
 
   @override
@@ -194,10 +195,17 @@ class _DishListTileState extends State<DishListTile> {
       maxLength: 10,
       controller: _priceTextController,
       focusNode: _priceFocusNode,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}')),
+      inputFormatters: <TextInputFormatter>[
+        // TODO https://medium.com/flutter-community/input-formatting-flutter-5237bf09e61f
+        //https://stackoverflow.com/questions/54454983/allow-only-two-decimal-number-in-flutter-input/54456978
+        FilteringTextInputFormatter.allow(
+          RegExp(r'^(\d+)?\.?\d{0,2}'),
+        ),
       ],
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      keyboardType: const TextInputType.numberWithOptions(
+        decimal: true,
+        signed: false,
+      ),
       decoration: InputDecoration(
         counterText: '',
         isDense: true,

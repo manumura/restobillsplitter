@@ -12,6 +12,8 @@ class BillStateNotifier extends StateNotifier<BillModel> {
             BillModel(
               guests: <GuestModel>[],
               dishes: <DishModel>[],
+              tax: 0.0,
+              isSplitTaxEqually: false,
             ));
 
   void addGuest() {
@@ -73,7 +75,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
       }
     }
 
-    state = BillModel(guests: guests, dishes: dishes);
+    state = BillModel(
+        guests: guests,
+        dishes: dishes,
+        tax: state.tax,
+        isSplitTaxEqually: state.isSplitTaxEqually);
     // print('new state: $state');
   }
 
@@ -96,7 +102,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
       }
     }
 
-    state = BillModel(guests: guests, dishes: dishes);
+    state = BillModel(
+        guests: guests,
+        dishes: dishes,
+        tax: state.tax,
+        isSplitTaxEqually: state.isSplitTaxEqually);
     // print('new state: $state');
   }
 
@@ -123,15 +133,39 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         else
           d,
     ];
-    state = BillModel(guests: state.guests, dishes: dishes);
+    state = BillModel(
+        guests: state.guests,
+        dishes: dishes,
+        tax: state.tax,
+        isSplitTaxEqually: state.isSplitTaxEqually);
     // print('new state: $state');
   }
 
   void removeDish(DishModel dish) {
     final List<DishModel> dishes =
         state.dishes.where((DishModel d) => d.uuid != dish.uuid).toList();
-    state = BillModel(guests: state.guests, dishes: dishes);
+    state = BillModel(
+        guests: state.guests,
+        dishes: dishes,
+        tax: state.tax,
+        isSplitTaxEqually: state.isSplitTaxEqually);
     // print('new state: $state');
+  }
+
+  void editTax(double tax) {
+    state = BillModel(
+        guests: state.guests,
+        dishes: state.dishes,
+        tax: tax,
+        isSplitTaxEqually: state.isSplitTaxEqually);
+  }
+
+  void editSplitTaxEqually({bool isSplitTaxEqually}) {
+    state = BillModel(
+        guests: state.guests,
+        dishes: state.dishes,
+        tax: state.tax,
+        isSplitTaxEqually: isSplitTaxEqually);
   }
 
   @override

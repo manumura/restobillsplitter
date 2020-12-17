@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/pages/dish_list_screen.dart';
 import 'package:restobillsplitter/pages/guest_list_screen.dart';
+import 'package:restobillsplitter/pages/other_screen.dart';
 
 class HomeScreen extends StatefulHookWidget {
   static const String routeName = '/';
@@ -58,7 +59,7 @@ class _HomeScreenScreenState extends State<HomeScreen>
             children: <Widget>[
               GuestListScreen(),
               DishListScreen(),
-              Container(),
+              OtherScreen(),
               Container(),
             ],
           ),
