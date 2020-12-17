@@ -36,7 +36,9 @@ class GuestListScreen extends HookWidget {
               },
               itemCount: guests.length,
               separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
+                  const Divider(
+                thickness: 2.0,
+              ),
             ),
       // bottomNavigationBar: BottomAppBar(
       //   shape: const CircularNotchedRectangle(),

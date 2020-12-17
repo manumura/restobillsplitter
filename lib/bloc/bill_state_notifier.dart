@@ -33,7 +33,6 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     final int nextIndex = state.guests.length + 1;
     final GuestModel guestToAdd =
         GuestModel(uuid: uuid.v4(), name: 'Guest$nextIndex', color: color);
-    print('guest to add : $guestToAdd');
     state = state..guests.add(guestToAdd);
   }
 
@@ -49,15 +48,56 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         else
           g,
     ];
-    state = BillModel(guests: guests, dishes: state.dishes);
-    print('new state: $state');
+
+    final List<DishModel> dishes = <DishModel>[];
+    if (state.dishes != null) {
+      for (final DishModel d in state.dishes) {
+        if (d.guests == null) {
+          continue;
+        }
+
+        final List<GuestModel> guests = <GuestModel>[];
+        for (final GuestModel g in d.guests) {
+          final GuestModel guestToAdd = g.uuid == guest.uuid
+              ? GuestModel(
+                  uuid: guest.uuid,
+                  name: guest.name,
+                  color: guest.color,
+                )
+              : g;
+          guests.add(guestToAdd);
+        }
+        final DishModel dishToAdd = DishModel(
+            uuid: d.uuid, name: d.name, price: d.price, guests: guests);
+        dishes.add(dishToAdd);
+      }
+    }
+
+    state = BillModel(guests: guests, dishes: dishes);
+    // print('new state: $state');
   }
 
   void removeGuest(GuestModel guest) {
     final List<GuestModel> guests =
         state.guests.where((GuestModel g) => g.uuid != guest.uuid).toList();
-    state = BillModel(guests: guests, dishes: state.dishes);
-    print('new state: $state');
+
+    final List<DishModel> dishes = <DishModel>[];
+    if (state.dishes != null) {
+      for (final DishModel d in state.dishes) {
+        if (d.guests == null) {
+          continue;
+        }
+
+        final List<GuestModel> guests =
+            d.guests.where((GuestModel g) => g.uuid != guest.uuid).toList();
+        final DishModel dishToAdd = DishModel(
+            uuid: d.uuid, name: d.name, price: d.price, guests: guests);
+        dishes.add(dishToAdd);
+      }
+    }
+
+    state = BillModel(guests: guests, dishes: dishes);
+    // print('new state: $state');
   }
 
   void addDish() {
@@ -70,6 +110,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
   }
 
   void editDish(DishModel dish) {
+    print('new dish: $dish');
     final List<DishModel> dishes = <DishModel>[
       for (final DishModel d in state.dishes)
         if (d.uuid == dish.uuid)
@@ -77,20 +118,20 @@ class BillStateNotifier extends StateNotifier<BillModel> {
             uuid: dish.uuid,
             name: dish.name,
             price: dish.price,
-            guest: dish.guest,
+            guests: dish.guests,
           )
         else
           d,
     ];
     state = BillModel(guests: state.guests, dishes: dishes);
-    print('new state: $state');
+    // print('new state: $state');
   }
 
   void removeDish(DishModel dish) {
     final List<DishModel> dishes =
         state.dishes.where((DishModel d) => d.uuid != dish.uuid).toList();
     state = BillModel(guests: state.guests, dishes: dishes);
-    print('new state: $state');
+    // print('new state: $state');
   }
 
   @override

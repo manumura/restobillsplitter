@@ -5,7 +5,6 @@ import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/pages/dish_list_screen.dart';
 import 'package:restobillsplitter/pages/guest_list_screen.dart';
-import 'package:restobillsplitter/pages/layout_screen.dart';
 
 class HomeScreen extends StatefulHookWidget {
   static const String routeName = '/';
@@ -57,9 +56,9 @@ class _HomeScreenScreenState extends State<HomeScreen>
               setState(() => _currentIndex = index);
             },
             children: <Widget>[
-              LayoutScreen(),
               GuestListScreen(),
               DishListScreen(),
+              Container(),
               Container(),
             ],
           ),
@@ -75,16 +74,16 @@ class _HomeScreenScreenState extends State<HomeScreen>
             },
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.storeAlt),
-                label: 'Layout',
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.userEdit),
                 label: 'Guests',
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.utensils),
                 label: 'Dishes',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.wallet),
+                label: 'Other',
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.dollarSign),

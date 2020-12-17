@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 
 class DishModel {
-  DishModel({@required this.uuid, @required this.name, this.price, this.guest})
+  DishModel({@required this.uuid, @required this.name, this.price, this.guests})
       : assert(uuid != null && name != null);
 
   String uuid;
   String name;
   double price;
-  GuestModel guest;
+  List<GuestModel> guests = <GuestModel>[];
 
   @override
   bool operator ==(Object other) =>
@@ -22,6 +22,7 @@ class DishModel {
 
   @override
   String toString() {
-    return 'DishModel{uuid: $uuid, name: $name, price: $price, guest: $guest}';
+    return 'DishModel{uuid: $uuid, name: $name, price: $price, guests: '
+        '$guests}';
   }
 }

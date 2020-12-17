@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
+import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/pages/assign_guest_to_dish_dialog.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
@@ -73,9 +75,11 @@ class _DishListTileState extends State<DishListTile> {
     if (!_nameFocusNode.hasFocus) {
       print('name lost focus: ${_nameTextController.text}');
       final DishModel dish = DishModel(
-          uuid: widget.dish.uuid,
-          name: _nameTextController.text,
-          price: widget.dish.price);
+        uuid: widget.dish.uuid,
+        name: _nameTextController.text,
+        price: widget.dish.price,
+        guests: widget.dish.guests,
+      );
       _editDish(dish);
     }
   }
@@ -85,9 +89,13 @@ class _DishListTileState extends State<DishListTile> {
       print('price lost focus: ${_priceTextController.text}');
       final double price = double.tryParse(
               _priceTextController.text.replaceFirst(RegExp(r','), '.')) ??
-          0.0;
+          0.00;
       final DishModel dish = DishModel(
-          uuid: widget.dish.uuid, name: widget.dish.name, price: price);
+        uuid: widget.dish.uuid,
+        name: widget.dish.name,
+        price: price,
+        guests: widget.dish.guests,
+      );
       _editDish(dish);
     }
   }
@@ -105,31 +113,35 @@ class _DishListTileState extends State<DishListTile> {
           onTap: _deleteDish,
         ),
       ],
-      child: Flex(
-        direction: Axis.horizontal,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Flexible(
-            flex: 18,
-            child: _buildNameTextField(widget.dish),
+          Flex(
+            direction: Axis.horizontal,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Flexible(
+                flex: 18,
+                child: _buildNameTextField(widget.dish),
+              ),
+              const Spacer(
+                flex: 1,
+              ),
+              Flexible(
+                flex: 9,
+                child: _buildPriceTextField(widget.dish),
+              ),
+              const Spacer(
+                flex: 1,
+              ),
+              Flexible(
+                flex: 4,
+                child: _buildSelectGuestButton(context, widget.dish),
+              ),
+            ],
           ),
-          const Spacer(
-            flex: 1,
-          ),
-          Flexible(
-            flex: 9,
-            child: _buildPriceTextField(widget.dish),
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-          Flexible(
-            flex: 4,
-            child: _buildSelectGuestButton(context, widget.dish),
-          ),
+          for (Widget w in _buildGuestsTextList()) w,
         ],
-        // title: _buildNameTextField(widget.dish),
-        // subtitle: _buildPriceTextField(widget.dish),
       ),
     );
   }
@@ -142,6 +154,7 @@ class _DishListTileState extends State<DishListTile> {
       textInputAction: TextInputAction.done,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
+        counterText: '',
         isDense: true,
         // prefixIcon: const Padding(
         //   padding: EdgeInsets.only(left: 5.0),
@@ -181,8 +194,12 @@ class _DishListTileState extends State<DishListTile> {
       maxLength: 10,
       controller: _priceTextController,
       focusNode: _priceFocusNode,
-      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}')),
+      ],
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: InputDecoration(
+        counterText: '',
         isDense: true,
         // prefixIcon: const Padding(
         //   padding: EdgeInsets.only(left: 5.0),
@@ -218,10 +235,13 @@ class _DishListTileState extends State<DishListTile> {
   }
 
   Widget _buildSelectGuestButton(BuildContext context, DishModel dish) {
+    final Color color = dish.guests == null || dish.guests.isEmpty
+        ? Colors.black
+        : Colors.black26;
     return IconButton(
       icon: Icon(
         FontAwesomeIcons.userEdit,
-        color: dish.guest != null ? dish.guest.color : Colors.black,
+        color: color,
       ),
       onPressed: () {
         // TODO
@@ -233,6 +253,41 @@ class _DishListTileState extends State<DishListTile> {
         );
       },
     );
+  }
+
+  List<Widget> _buildGuestsTextList() {
+    final List<Widget> guestsTextList = <Widget>[];
+    final List<GuestModel> guests = widget.dish.guests;
+
+    if (guests != null && guests.isNotEmpty) {
+      guestsTextList.add(const SizedBox(
+        height: 5.0,
+      ));
+
+      guestsTextList.add(
+        RichText(
+          text: TextSpan(
+            children: <InlineSpan>[
+              for (int i = 0; i < guests.length; i++)
+                TextSpan(
+                  text: i > 0 ? ' ${guests[i].name}' : guests[i].name,
+                  style: TextStyle(
+                      color: guests[i].color, fontWeight: FontWeight.bold),
+                ),
+              TextSpan(
+                text: widget.dish.guests.length > 1
+                    ? ' shared this dish'
+                    : ' got this dish',
+                style: const TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return guestsTextList;
   }
 
   void _editDish(DishModel dish) {

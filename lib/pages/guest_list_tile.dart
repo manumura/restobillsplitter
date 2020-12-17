@@ -73,7 +73,6 @@ class _GuestListTileState extends State<GuestListTile> {
       ],
       child: Flex(
         direction: Axis.horizontal,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Flexible(
             flex: 3,
@@ -101,23 +100,24 @@ class _GuestListTileState extends State<GuestListTile> {
       textInputAction: TextInputAction.done,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
+        counterText: '',
         isDense: true,
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(left: 5.0),
-          child: Icon(
-            Icons.account_box,
-            color: guest.color,
-          ),
-        ),
+        // prefixIcon: Padding(
+        //   padding: const EdgeInsets.only(left: 5.0),
+        //   child: Icon(
+        //     Icons.account_box,
+        //     color: guest.color,
+        //   ),
+        // ),
         suffixIcon: !_isNameClearVisible
             ? const SizedBox()
             : IconButton(
                 onPressed: () {
                   _nameTextController.clear();
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.clear,
-                  color: guest.color,
+                  // color: guest.color,
                 )),
         labelText: 'Name',
         contentPadding: const EdgeInsets.all(8.0),
