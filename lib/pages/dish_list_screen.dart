@@ -20,7 +20,7 @@ class DishListScreen extends HookWidget {
         title: const Text('Dishes'),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         actions: <Widget>[
-          _buildAddGuestButton(context),
+          _buildAddDishButton(context),
         ],
       ),
       body: dishes.isEmpty
@@ -54,7 +54,7 @@ class DishListScreen extends HookWidget {
     );
   }
 
-  Widget _buildAddGuestButton(BuildContext context) {
+  Widget _buildAddDishButton(BuildContext context) {
     return TextButton.icon(
       label: const Text('ADD'),
       icon: const Icon(

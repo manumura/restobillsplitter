@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
@@ -8,14 +9,14 @@ import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
-class OtherScreen extends StatefulHookWidget {
-  static const String routeName = '/other';
+class OthersScreen extends StatefulHookWidget {
+  static const String routeName = '/others';
 
   @override
   State<StatefulWidget> createState() => _OtherScreenState();
 }
 
-class _OtherScreenState extends State<OtherScreen> {
+class _OtherScreenState extends State<OthersScreen> {
   final Logger logger = getLogger();
 
   BillStateNotifier billStateNotifier;
@@ -23,6 +24,7 @@ class _OtherScreenState extends State<OtherScreen> {
   final TextEditingController _taxTextController = TextEditingController();
   final FocusNode _taxFocusNode = FocusNode();
   bool _isTaxClearVisible = false;
+  bool _isTaxValid = true;
 
   @override
   void initState() {
@@ -55,17 +57,20 @@ class _OtherScreenState extends State<OtherScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Other'),
+        title: const Text('Others'),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
       body: ListView(
         children: <Widget>[
+          const SizedBox(
+            height: 16.0,
+          ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: _buildTaxTextField(),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: _buildSplitEquallySwitch(isSplitTaxEqually),
           ),
         ],
@@ -76,7 +81,7 @@ class _OtherScreenState extends State<OtherScreen> {
   Widget _buildTaxTextField() {
     print('_buildTaxTextField');
     return TextField(
-      maxLength: 10,
+      maxLength: 5,
       controller: _taxTextController,
       focusNode: _taxFocusNode,
       inputFormatters: <TextInputFormatter>[
@@ -96,7 +101,7 @@ class _OtherScreenState extends State<OtherScreen> {
         prefixIcon: const Padding(
           padding: EdgeInsets.only(left: 5.0),
           child: Icon(
-            Icons.attach_money,
+            FontAwesomeIcons.percent,
           ),
         ),
         suffixIcon: !_isTaxClearVisible
@@ -109,6 +114,7 @@ class _OtherScreenState extends State<OtherScreen> {
                   Icons.clear,
                 )),
         labelText: 'Tax',
+        errorText: _isTaxValid ? null : 'Should be between 0 and 100',
         contentPadding: const EdgeInsets.all(10.0),
         border: const OutlineInputBorder(),
         filled: true,
@@ -138,9 +144,22 @@ class _OtherScreenState extends State<OtherScreen> {
     if (!_taxFocusNode.hasFocus) {
       final double tax = double.tryParse(
               _taxTextController.text.replaceFirst(RegExp(r','), '.')) ??
-          0.00;
-      billStateNotifier.editTax(tax);
+          0.0;
+
+      final bool isValid = _validateTax(tax);
+      if (isValid) {
+        billStateNotifier.editTax(tax);
+      }
     }
+  }
+
+  bool _validateTax(double tax) {
+    bool isValid = true;
+    if (tax == null || tax < 0 || tax > 100) {
+      isValid = false;
+    }
+    setState(() => _isTaxValid = isValid);
+    return isValid;
   }
 
   void _editSplitTaxEqually(bool isSplitEqually) {

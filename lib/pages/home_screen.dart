@@ -3,9 +3,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
+import 'package:restobillsplitter/pages/assign_screen.dart';
 import 'package:restobillsplitter/pages/dish_list_screen.dart';
 import 'package:restobillsplitter/pages/guest_list_screen.dart';
-import 'package:restobillsplitter/pages/other_screen.dart';
+import 'package:restobillsplitter/pages/others_screen.dart';
 
 class HomeScreen extends StatefulHookWidget {
   static const String routeName = '/';
@@ -59,7 +60,8 @@ class _HomeScreenScreenState extends State<HomeScreen>
             children: <Widget>[
               GuestListScreen(),
               DishListScreen(),
-              OtherScreen(),
+              AssignScreen(),
+              OthersScreen(),
               Container(),
             ],
           ),
@@ -83,8 +85,12 @@ class _HomeScreenScreenState extends State<HomeScreen>
                 label: 'Dishes',
               ),
               BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.peopleArrows),
+                label: 'Assign',
+              ),
+              BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.wallet),
-                label: 'Other',
+                label: 'Others',
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.dollarSign),

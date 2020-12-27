@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
-import 'package:restobillsplitter/models/guest_model.dart';
-import 'package:restobillsplitter/pages/assign_guest_to_dish_dialog.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class DishListTile extends StatefulHookWidget {
@@ -75,13 +72,7 @@ class _DishListTileState extends State<DishListTile> {
   void _editDishName() {
     if (!_nameFocusNode.hasFocus) {
       print('name lost focus: ${_nameTextController.text}');
-      final DishModel dish = DishModel(
-        uuid: widget.dish.uuid,
-        name: _nameTextController.text,
-        price: widget.dish.price,
-        guests: widget.dish.guests,
-      );
-      _editDish(dish);
+      _saveDishName(_nameTextController.text);
     }
   }
 
@@ -91,13 +82,7 @@ class _DishListTileState extends State<DishListTile> {
       final double price = double.tryParse(
               _priceTextController.text.replaceFirst(RegExp(r','), '.')) ??
           0.00;
-      final DishModel dish = DishModel(
-        uuid: widget.dish.uuid,
-        name: widget.dish.name,
-        price: price,
-        guests: widget.dish.guests,
-      );
-      _editDish(dish);
+      _saveDishPrice(price);
     }
   }
 
@@ -122,26 +107,18 @@ class _DishListTileState extends State<DishListTile> {
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Flexible(
-                flex: 18,
+                flex: 20,
                 child: _buildNameTextField(widget.dish),
               ),
               const Spacer(
                 flex: 1,
               ),
               Flexible(
-                flex: 9,
+                flex: 13,
                 child: _buildPriceTextField(widget.dish),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
-              Flexible(
-                flex: 4,
-                child: _buildSelectGuestButton(context, widget.dish),
               ),
             ],
           ),
-          for (Widget w in _buildGuestsTextList()) w,
         ],
       ),
     );
@@ -242,63 +219,31 @@ class _DishListTileState extends State<DishListTile> {
     );
   }
 
-  Widget _buildSelectGuestButton(BuildContext context, DishModel dish) {
-    final Color color = dish.guests == null || dish.guests.isEmpty
-        ? Colors.black
-        : Colors.black26;
-    return IconButton(
-      icon: Icon(
-        FontAwesomeIcons.userEdit,
-        color: color,
-      ),
-      onPressed: () {
-        // TODO
-        showDialog<AlertDialog>(
-          context: context,
-          builder: (BuildContext context) {
-            return AssignGuestToDishDialog(dish: dish);
-          },
-        );
-      },
-    );
-  }
-
-  List<Widget> _buildGuestsTextList() {
-    final List<Widget> guestsTextList = <Widget>[];
-    final List<GuestModel> guests = widget.dish.guests;
-
-    if (guests != null && guests.isNotEmpty) {
-      guestsTextList.add(const SizedBox(
-        height: 5.0,
-      ));
-
-      guestsTextList.add(
-        RichText(
-          text: TextSpan(
-            children: <InlineSpan>[
-              for (int i = 0; i < guests.length; i++)
-                TextSpan(
-                  text: i > 0 ? ' ${guests[i].name}' : guests[i].name,
-                  style: TextStyle(
-                      color: guests[i].color, fontWeight: FontWeight.bold),
-                ),
-              TextSpan(
-                text: widget.dish.guests.length > 1
-                    ? ' shared this dish'
-                    : ' got this dish',
-                style: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
+  void _saveDishName(String name) {
+    if (name != null) {
+      final DishModel dish = DishModel(
+        uuid: widget.dish.uuid,
+        name: name,
+        price: widget.dish.price,
+        guests: widget.dish.guests,
       );
+      _saveDish(dish);
     }
-
-    return guestsTextList;
   }
 
-  void _editDish(DishModel dish) {
+  void _saveDishPrice(double price) {
+    if (price != null) {
+      final DishModel dish = DishModel(
+        uuid: widget.dish.uuid,
+        name: widget.dish.name,
+        price: price,
+        guests: widget.dish.guests,
+      );
+      _saveDish(dish);
+    }
+  }
+
+  void _saveDish(DishModel dish) {
     billStateNotifier.editDish(
       dish,
     );

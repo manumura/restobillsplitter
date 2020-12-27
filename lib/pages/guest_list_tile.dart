@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
@@ -38,7 +39,7 @@ class _GuestListTileState extends State<GuestListTile> {
     _nameTextController.addListener(_toggleNameClearVisible);
     _nameTextController.text = (widget.guest == null) ? '' : widget.guest.name;
 
-    _nameFocusNode.addListener(_editGuest);
+    _nameFocusNode.addListener(_editGuestName);
   }
 
   @override
@@ -53,9 +54,9 @@ class _GuestListTileState extends State<GuestListTile> {
     });
   }
 
-  void _editGuest() {
+  void _editGuestName() {
     if (!_nameFocusNode.hasFocus) {
-      _editGuestName(_nameTextController.text);
+      _saveGuestName(_nameTextController.text);
     }
   }
 
@@ -77,9 +78,13 @@ class _GuestListTileState extends State<GuestListTile> {
         children: <Widget>[
           Flexible(
             flex: 3,
-            child: CircleAvatar(
-              backgroundColor: widget.guest.color ?? Colors.black,
+            child: Icon(
+              FontAwesomeIcons.userAlt,
+              color: widget.guest.color ?? Colors.black,
             ),
+            // child: CircleAvatar(
+            //   backgroundColor: widget.guest.color ?? Colors.black,
+            // ),
           ),
           const Spacer(
             flex: 1,
@@ -142,12 +147,14 @@ class _GuestListTileState extends State<GuestListTile> {
     );
   }
 
-  void _editGuestName(String name) {
+  void _saveGuestName(String name) {
     print('lost focus: $name');
-    billStateNotifier.editGuest(
-      GuestModel(
-          uuid: widget.guest.uuid, name: name, color: widget.guest.color),
-    );
+    if (name != null) {
+      billStateNotifier.editGuest(
+        GuestModel(
+            uuid: widget.guest.uuid, name: name, color: widget.guest.color),
+      );
+    }
   }
 
   void _deleteGuest() {
