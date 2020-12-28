@@ -38,9 +38,6 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // final BillModel bill = useProvider(billStateNotifierProvider.state);
-    // final List<GuestModel> guests = bill.guests;
-
     return AlertDialog(
       title: Column(
         children: <Widget>[
@@ -77,22 +74,8 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
               child: ListView.separated(
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(10.0),
-                itemCount:
-                    guests.length, // guests == null || guests.isEmpty ? 1 :
-                // guests.length + 1,
+                itemCount: guests.length,
                 itemBuilder: (BuildContext context, int index) {
-                  // if (index == 0) {
-                  //   return ListTile(
-                  //     key: UniqueKey(),
-                  //     title: const Text('Split equally'),
-                  //     leading: const CircleAvatar(
-                  //       backgroundColor: Colors.black,
-                  //     ),
-                  //     onTap: () => assignGuestToDish(context, null),
-                  //   );
-                  // }
-                  //
-                  // index -= 1;
                   final GuestModel guest = guests[index];
                   return _buildGuestListTile(context, guest);
                 },
@@ -125,8 +108,6 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
   }
 
   void _assignGuestsToDish() {
-    // final BillStateNotifier billStateNotifier =
-    //     context.read(billStateNotifierProvider);
     final List<GuestModel> guests = <GuestModel>[];
 
     _selectedMap.forEach((GuestModel guest, bool selected) {
@@ -135,11 +116,6 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
       }
     });
 
-    final DishModel newDish = DishModel(
-        uuid: widget.dish.uuid,
-        name: widget.dish.name,
-        price: widget.dish.price,
-        guests: guests);
-    billStateNotifier.editDish(newDish);
+    billStateNotifier.assignGuestsToDish(widget.dish, guests);
   }
 }

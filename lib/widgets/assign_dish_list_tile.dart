@@ -6,7 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
-import 'package:restobillsplitter/pages/assign_guest_to_dish_dialog.dart';
+import 'package:restobillsplitter/widgets/assign_guest_to_dish_dialog.dart';
 
 class AssignDishListTile extends HookWidget {
   AssignDishListTile({@required this.key, @required this.dish})
@@ -40,7 +40,6 @@ class AssignDishListTile extends HookWidget {
             ],
           ),
           trailing: _buildSelectGuestButton(context, dish),
-          // for (Widget w in _buildGuestsTextList()) w,
         ),
       ),
     );

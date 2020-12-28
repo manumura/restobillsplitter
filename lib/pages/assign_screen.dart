@@ -5,8 +5,9 @@ import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
-import 'package:restobillsplitter/pages/assign_dish_list_tile.dart';
 import 'package:restobillsplitter/state/providers.dart';
+
+import 'file:///E:/Manu/DEV/flutterworkspace/flutter_resto_bill_splitter/lib/widgets/assign_dish_list_tile.dart';
 
 class AssignScreen extends HookWidget {
   static const String routeName = '/assign';
@@ -25,7 +26,7 @@ class AssignScreen extends HookWidget {
       ),
       body: dishes.isEmpty
           ? const Center(
-              child: Text('Please add a dish'),
+              child: Text('Please add a dish first'),
             )
           : ListView.separated(
               padding: const EdgeInsets.all(10.0),

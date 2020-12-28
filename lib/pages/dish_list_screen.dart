@@ -4,8 +4,9 @@ import 'package:hooks_riverpod/all.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
-import 'package:restobillsplitter/pages/dish_list_tile.dart';
 import 'package:restobillsplitter/state/providers.dart';
+
+import 'file:///E:/Manu/DEV/flutterworkspace/flutter_resto_bill_splitter/lib/widgets/dish_list_tile.dart';
 
 class DishListScreen extends HookWidget {
   static const String routeName = '/dish_list';
@@ -25,7 +26,7 @@ class DishListScreen extends HookWidget {
       ),
       body: dishes.isEmpty
           ? const Center(
-              child: Text('Please add a dish'),
+              child: Text('Please add a dish first'),
             )
           : ListView.separated(
               padding: const EdgeInsets.all(10.0),

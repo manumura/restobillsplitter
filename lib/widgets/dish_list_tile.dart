@@ -227,7 +227,9 @@ class _DishListTileState extends State<DishListTile> {
         price: widget.dish.price,
         guests: widget.dish.guests,
       );
-      _saveDish(dish);
+      billStateNotifier.editDish(
+        dish,
+      );
     }
   }
 
@@ -239,14 +241,11 @@ class _DishListTileState extends State<DishListTile> {
         price: price,
         guests: widget.dish.guests,
       );
-      _saveDish(dish);
+      billStateNotifier.editDishPrice(
+        dish,
+        price,
+      );
     }
-  }
-
-  void _saveDish(DishModel dish) {
-    billStateNotifier.editDish(
-      dish,
-    );
   }
 
   void _deleteDish() {

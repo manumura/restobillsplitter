@@ -4,8 +4,9 @@ import 'package:hooks_riverpod/all.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
-import 'package:restobillsplitter/pages/guest_list_tile.dart';
 import 'package:restobillsplitter/state/providers.dart';
+
+import 'file:///E:/Manu/DEV/flutterworkspace/flutter_resto_bill_splitter/lib/widgets/guest_list_tile.dart';
 
 class GuestListScreen extends HookWidget {
   static const String routeName = '/guest_list';
@@ -25,7 +26,7 @@ class GuestListScreen extends HookWidget {
       ),
       body: guests.isEmpty
           ? const Center(
-              child: Text('Please add a guest'),
+              child: Text('Please add a guest first'),
             )
           : ListView.separated(
               padding: const EdgeInsets.all(10.0),

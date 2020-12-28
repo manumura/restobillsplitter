@@ -18,6 +18,23 @@ class BillModel {
   double tax;
   bool isSplitTaxEqually;
 
+  double get total {
+    if (dishes == null) {
+      return 0.0;
+    }
+
+    double total = 0.0;
+    for (final DishModel dish in dishes) {
+      if (dish.price == null) {
+        continue;
+      }
+
+      total += dish.price;
+    }
+
+    return total;
+  }
+
   @override
   String toString() {
     return 'BillModel{guests: $guests, dishes:$dishes, tax: $tax, isSplitTaxEqually: $isSplitTaxEqually}';

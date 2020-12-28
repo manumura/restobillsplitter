@@ -152,7 +152,10 @@ class _GuestListTileState extends State<GuestListTile> {
     if (name != null) {
       billStateNotifier.editGuest(
         GuestModel(
-            uuid: widget.guest.uuid, name: name, color: widget.guest.color),
+            uuid: widget.guest.uuid,
+            name: name,
+            color: widget.guest.color,
+            total: widget.guest.total),
       );
     }
   }
