@@ -18,6 +18,7 @@ class AssignGuestToDishDialog extends StatefulHookWidget {
 
 class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
   final Map<GuestModel, bool> _selectedMap = <GuestModel, bool>{};
+  bool _isSelectEveryoneChecked = true;
   BillStateNotifier billStateNotifier;
   BillModel bill;
   List<GuestModel> guests;
@@ -31,14 +32,17 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
     guests = bill.guests;
 
     for (final GuestModel guest in guests) {
-      _selectedMap[guest] =
+      final bool isGuestSelected =
           widget.dish.guests != null && widget.dish.guests.contains(guest);
+      _selectedMap[guest] = isGuestSelected;
+      _isSelectEveryoneChecked = _isSelectEveryoneChecked && isGuestSelected;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      insetPadding: const EdgeInsets.all(20),
       title: Column(
         children: <Widget>[
           Text(widget.dish.name),
@@ -50,7 +54,7 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
           ),
         ],
       ),
-      actions: [
+      actions: <Widget>[
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
@@ -67,15 +71,26 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
       ],
       content: guests.isEmpty
           ? const Center(
-              child: Text('Please add a guest'),
+              child: Text('Please add a guest first'),
             )
           : SizedBox(
-              width: double.minPositive,
+              width: MediaQuery.of(context).size.width,
               child: ListView.separated(
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(10.0),
-                itemCount: guests.length,
+                // itemCount: guests.length,
+                // itemBuilder: (BuildContext context, int index) {
+                //   final GuestModel guest = guests[index];
+                //   return _buildGuestListTile(context, guest);
+                // },
+                itemCount:
+                    guests == null || guests.isEmpty ? 1 : guests.length + 1,
                 itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return _buildAllListTile(context);
+                  }
+
+                  index -= 1;
                   final GuestModel guest = guests[index];
                   return _buildGuestListTile(context, guest);
                 },
@@ -103,8 +118,34 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
     );
   }
 
+  Widget _buildAllListTile(BuildContext context) {
+    return CheckboxListTile(
+      key: UniqueKey(),
+      title: const Text('Select everyone'),
+      secondary: const CircleAvatar(
+        backgroundColor: Colors.black,
+      ),
+      activeColor: Colors.blue[800],
+      // checkColor: Colors.red[100],
+      controlAffinity: ListTileControlAffinity.leading,
+      selected: _isSelectEveryoneChecked,
+      value: _isSelectEveryoneChecked,
+      onChanged: (bool selected) => _selectAll(selected: selected),
+    );
+  }
+
   void _selectGuest({GuestModel guest, bool selected}) {
     setState(() => _selectedMap[guest] = selected);
+  }
+
+  void _selectAll({bool selected}) {
+    setState(() {
+      _isSelectEveryoneChecked = selected;
+      for (final MapEntry<GuestModel, bool> selectedMapEntry
+          in _selectedMap.entries) {
+        _selectedMap[selectedMapEntry.key] = selected;
+      }
+    });
   }
 
   void _assignGuestsToDish() {

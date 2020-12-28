@@ -32,7 +32,26 @@ class BillModel {
       total += dish.price;
     }
 
-    return total;
+    // Round to 2 decimals
+    return double.parse(total.toStringAsFixed(2));
+  }
+
+  double get totalSplit {
+    if (guests == null) {
+      return 0.0;
+    }
+
+    double total = 0.0;
+    for (final GuestModel guest in guests) {
+      if (guest.total == null) {
+        continue;
+      }
+
+      total += guest.total;
+    }
+
+    // Round to 2 decimals
+    return double.parse(total.toStringAsFixed(2));
   }
 
   @override

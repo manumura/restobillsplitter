@@ -57,7 +57,8 @@ class GuestModel {
       print('For dish ${dish.name} : $totalForDish');
     }
 
-    return totalForDish;
+    // Round to 2 decimals
+    return double.parse(totalForDish.toStringAsFixed(2));
   }
 
   @override

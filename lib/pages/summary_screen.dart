@@ -18,10 +18,12 @@ class SummaryScreen extends HookWidget {
     final BillModel bill = useProvider(billStateNotifierProvider.state);
     final List<GuestModel> guests = bill.guests;
     final double total = bill.total;
+    final double totalSplit = bill.totalSplit;
+    print('totalSplit $totalSplit');
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Summary'),
+        title: Text('Total: \$$total (to split: \$$totalSplit)'),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
       body: guests.isEmpty
@@ -30,27 +32,17 @@ class SummaryScreen extends HookWidget {
             )
           // https://medium.com/swlh/flutter-slivers-and-customscrollview-1aaadf96e35a
           // https://flutteragency.com/nestedscrollview-widget/
-          : NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  SliverAppBar(
-                    title: Text('Total: $total'),
-                  )
-                ];
+          : ListView.separated(
+              padding: const EdgeInsets.all(10.0),
+              itemBuilder: (BuildContext context, int index) {
+                final GuestModel guest = guests[index];
+                return SummaryListTile(
+                    key: ValueKey<String>(guest.uuid), guest: guest);
               },
-              body: ListView.separated(
-                padding: const EdgeInsets.all(10.0),
-                itemBuilder: (BuildContext context, int index) {
-                  final GuestModel guest = guests[index];
-                  return SummaryListTile(
-                      key: ValueKey<String>(guest.uuid), guest: guest);
-                },
-                itemCount: guests.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                  height: 5.0,
-                ),
+              itemCount: guests.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(
+                height: 5.0,
               ),
             ),
     );

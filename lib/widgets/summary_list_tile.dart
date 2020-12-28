@@ -28,7 +28,7 @@ class SummaryListTile extends HookWidget {
           guest.name,
           // style: TextStyle(color: Theme.of(context).primaryColor),
         ),
-        subtitle: Text(guest.total?.toString() ?? '0.0'),
+        subtitle: Text('needs to pay \$${guest.total?.toString()}' ?? '\$0.0'),
         // trailing: _buildSelectGuestButton(context, dish),
       ),
     );
