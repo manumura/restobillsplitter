@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
+import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class OthersScreen extends StatefulHookWidget {
@@ -56,6 +57,7 @@ class _OtherScreenState extends State<OthersScreen> {
     final bool isSplitTaxEqually = bill.isSplitTaxEqually;
 
     return Scaffold(
+      drawer: SideDrawer(),
       appBar: AppBar(
         title: const Text('Others'),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,

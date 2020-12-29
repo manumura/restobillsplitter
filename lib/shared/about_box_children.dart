@@ -7,6 +7,7 @@ List<Widget> buildAboutBoxChildren(BuildContext context) {
     const SizedBox(
       height: 20,
     ),
+    // TODO app description
     RichText(
       text: const TextSpan(
         children: <InlineSpan>[

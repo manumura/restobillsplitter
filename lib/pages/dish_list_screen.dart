@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/all.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
+import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 import 'file:///E:/Manu/DEV/flutterworkspace/flutter_resto_bill_splitter/lib/widgets/dish_list_tile.dart';
@@ -17,6 +18,7 @@ class DishListScreen extends HookWidget {
     final List<DishModel> dishes = bill.dishes;
 
     return Scaffold(
+      drawer: SideDrawer(),
       appBar: AppBar(
         title: const Text('Dishes'),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
