@@ -45,11 +45,18 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
       insetPadding: const EdgeInsets.all(20),
       title: Column(
         children: <Widget>[
-          Text(widget.dish.name),
+          Text(
+            widget.dish.name,
+            style: const TextStyle(
+              // fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
           const Text(
             'Which guest(s) shared this dish?',
             style: TextStyle(
               fontSize: 16,
+              color: Colors.black,
             ),
           ),
         ],

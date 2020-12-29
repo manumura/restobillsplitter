@@ -99,25 +99,20 @@ class _DishListTileState extends State<DishListTile> {
           onTap: _deleteDish,
         ),
       ],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Flex(
+        direction: Axis.horizontal,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Flex(
-            direction: Axis.horizontal,
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Flexible(
-                flex: 20,
-                child: _buildNameTextField(widget.dish),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
-              Flexible(
-                flex: 13,
-                child: _buildPriceTextField(widget.dish),
-              ),
-            ],
+          Flexible(
+            flex: 20,
+            child: _buildNameTextField(widget.dish),
+          ),
+          const Spacer(
+            flex: 1,
+          ),
+          Flexible(
+            flex: 13,
+            child: _buildPriceTextField(widget.dish),
           ),
         ],
       ),
@@ -148,7 +143,8 @@ class _DishListTileState extends State<DishListTile> {
                 },
                 icon: const Icon(
                   Icons.clear,
-                )),
+                ),
+              ),
         labelText: 'Name',
         contentPadding: const EdgeInsets.all(8.0),
         border: const OutlineInputBorder(),
@@ -200,9 +196,10 @@ class _DishListTileState extends State<DishListTile> {
                 },
                 icon: const Icon(
                   Icons.clear,
-                )),
+                ),
+              ),
         labelText: 'Price',
-        contentPadding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        contentPadding: const EdgeInsets.all(10.0),
         border: const OutlineInputBorder(),
         filled: true,
         fillColor: Colors.white,

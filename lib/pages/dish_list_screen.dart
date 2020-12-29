@@ -60,7 +60,7 @@ class DishListScreen extends HookWidget {
       label: const Text('ADD'),
       icon: const Icon(
         Icons.add,
-        color: Colors.white,
+        // color: Colors.white,
       ),
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.resolveWith(
@@ -68,7 +68,7 @@ class DishListScreen extends HookWidget {
             if (states.contains(MaterialState.disabled)) {
               return Colors.grey;
             } else {
-              return Colors.white;
+              return Colors.black;
             }
           },
         ),

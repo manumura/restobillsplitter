@@ -73,27 +73,39 @@ class _GuestListTileState extends State<GuestListTile> {
           onTap: _deleteGuest,
         ),
       ],
-      child: Flex(
-        direction: Axis.horizontal,
-        children: <Widget>[
-          Flexible(
-            flex: 3,
-            child: Icon(
-              FontAwesomeIcons.userAlt,
-              color: widget.guest.color ?? Colors.black,
+      // TODO
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.red),
+        ),
+        child: Flex(
+          direction: Axis.horizontal,
+          children: <Widget>[
+            Flexible(
+              flex: 3,
+              child: Icon(
+                FontAwesomeIcons.userAlt,
+                color: widget.guest.color ?? Colors.black,
+              ),
+              // child: CircleAvatar(
+              //   backgroundColor: widget.guest.color ?? Colors.black,
+              // ),
             ),
-            // child: CircleAvatar(
-            //   backgroundColor: widget.guest.color ?? Colors.black,
-            // ),
-          ),
-          const Spacer(
-            flex: 1,
-          ),
-          Flexible(
-            flex: 18,
-            child: _buildNameTextField(widget.guest),
-          ),
-        ],
+            const Spacer(
+              flex: 1,
+            ),
+            Flexible(
+              flex: 18,
+              // TODO
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.red),
+                ),
+                child: _buildNameTextField(widget.guest),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -124,16 +136,17 @@ class _GuestListTileState extends State<GuestListTile> {
                 icon: const Icon(
                   Icons.clear,
                   // color: guest.color,
-                )),
+                ),
+              ),
+        labelText: 'Name',
         contentPadding: const EdgeInsets.all(8.0),
-        // border: const OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         // enabledBorder: OutlineInputBorder(
         //   borderSide: BorderSide(color: guest.color),
         // ),
         filled: true,
         fillColor: Colors.white,
-        floatingLabelBehavior: FloatingLabelBehavior.never,
-        labelText: 'Name',
+        // floatingLabelBehavior: FloatingLabelBehavior.never,
       ),
       onChanged: (String value) {
         // TODO

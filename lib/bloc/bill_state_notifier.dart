@@ -160,8 +160,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     ];
 
     // Calculate total per guest for all guests
-    final List<GuestModel> newGuests =
-        _getAllGuestsWithTotal(newDishes, dish.guests);
+    final List<GuestModel> newGuests = _getAllGuestsWithTotal(newDishes);
 
     state = BillModel(
         guests: newGuests,
@@ -185,8 +184,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     ];
 
     // Calculate total per guest for all guests
-    final List<GuestModel> newGuests =
-        _getAllGuestsWithTotal(newDishes, guests);
+    final List<GuestModel> newGuests = _getAllGuestsWithTotal(newDishes);
 
     state = BillModel(
         guests: newGuests,
@@ -221,43 +219,15 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         isSplitTaxEqually: isSplitTaxEqually);
   }
 
-  List<GuestModel> _getAllGuestsWithTotal(
-      List<DishModel> currentDishes, List<GuestModel> guestsToUpdate) {
+  List<GuestModel> _getAllGuestsWithTotal(List<DishModel> currentDishes) {
     final List<GuestModel> currentGuests = state.guests;
-    final List<GuestModel> updatedGuests =
-        _getUpdatedGuestsWithTotal(currentDishes, guestsToUpdate);
     final List<GuestModel> newGuests = <GuestModel>[];
     for (final GuestModel currentGuest in currentGuests) {
-      GuestModel newGuest;
-      if (guestsToUpdate != null && guestsToUpdate.contains(currentGuest)) {
-        for (final GuestModel updatedGuest in updatedGuests) {
-          if (updatedGuest.uuid == currentGuest.uuid) {
-            newGuest = updatedGuest;
-            print('newGuest: $newGuest');
-            break;
-          }
-        }
-      } else {
-        newGuest = currentGuest;
-      }
-      newGuests.add(newGuest);
-    }
-
-    return newGuests;
-  }
-
-  List<GuestModel> _getUpdatedGuestsWithTotal(
-      List<DishModel> currentDishes, List<GuestModel> guestsToUpdate) {
-    if (guestsToUpdate == null) {
-      return guestsToUpdate;
-    }
-
-    final List<GuestModel> newGuests = <GuestModel>[];
-    for (final GuestModel guestToUpdate in guestsToUpdate) {
       final GuestModel newGuest =
-          GuestModel.cloneWithCalculatedTotal(guestToUpdate, currentDishes);
+          GuestModel.cloneWithCalculatedTotal(currentGuest, currentDishes);
       newGuests.add(newGuest);
     }
+
     return newGuests;
   }
 

@@ -100,7 +100,7 @@ class _HomeScreenScreenState extends State<HomeScreen>
             ],
             elevation: 10.0,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.indigo[100],
+            backgroundColor: Colors.grey[500],
             selectedFontSize: 16.0,
             selectedIconTheme: const IconThemeData(size: 30.0),
           ),

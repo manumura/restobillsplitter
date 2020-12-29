@@ -16,9 +16,7 @@ class GuestModel {
       return null;
     }
 
-    print('For guest ${guest.name}');
     final double guestTotal = _calculateTotal(guest, dishes);
-    print('total $guestTotal');
     return GuestModel(
       uuid: guest.uuid,
       name: guest.name,
@@ -37,13 +35,17 @@ class GuestModel {
       return 0.0;
     }
 
+    print('For guest ${guest.name}');
     double guestTotal = 0.0;
     for (final DishModel dish in dishes) {
       final double totalForDish = _calculateTotalPerDish(guest, dish);
+      print('For dish ${dish.name} : $totalForDish');
       guestTotal += totalForDish;
     }
 
-    return guestTotal;
+    print('total $guestTotal');
+    // Round to 2 decimals
+    return double.parse(guestTotal.toStringAsFixed(2));
   }
 
   static double _calculateTotalPerDish(GuestModel guest, DishModel dish) {
@@ -54,11 +56,9 @@ class GuestModel {
 
     if (dish.guests.contains(guest) && dish.price != null) {
       totalForDish = dish.price / dish.guests.length;
-      print('For dish ${dish.name} : $totalForDish');
     }
 
-    // Round to 2 decimals
-    return double.parse(totalForDish.toStringAsFixed(2));
+    return totalForDish;
   }
 
   @override
