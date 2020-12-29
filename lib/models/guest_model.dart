@@ -81,6 +81,7 @@ class GuestModel {
     return total + taxAsAmount;
   }
 
+  // TODO move to DishModel
   static double _calculateTotalPerDish(GuestModel guest, DishModel dish) {
     double totalForDish = 0.0;
     if (dish.guests == null) {
