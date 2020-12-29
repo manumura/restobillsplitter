@@ -77,9 +77,6 @@ flutter:
      fonts:
        - asset: assets/fonts/Raleway-Bold.ttf
          weight: 700
-   - family: LuckiestGuy
-     fonts:
-       - asset: assets/fonts/LuckiestGuy-Regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

@@ -110,7 +110,7 @@ class _DishListTileState extends State<DishListTile> {
           const Spacer(
             flex: 1,
           ),
-          Flexible(
+          Expanded(
             flex: 13,
             child: _buildPriceTextField(widget.dish),
           ),

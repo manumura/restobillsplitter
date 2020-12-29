@@ -19,11 +19,10 @@ class SummaryScreen extends HookWidget {
     final List<GuestModel> guests = bill.guests;
     final double total = bill.total;
     final double totalSplit = bill.totalSplit;
-    print('totalSplit $totalSplit');
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Total: \$$total (to split: \$$totalSplit)'),
+        title: _buildTitle(total, totalSplit),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
       body: guests.isEmpty
@@ -45,6 +44,33 @@ class SummaryScreen extends HookWidget {
                 height: 5.0,
               ),
             ),
+    );
+  }
+
+  Widget _buildTitle(double total, double totalSplit) {
+    return RichText(
+      text: TextSpan(
+        children: <InlineSpan>[
+          TextSpan(
+            text: 'Total: \$$total ',
+            style: const TextStyle(
+              color: Colors.black,
+              fontFamily: 'Raleway',
+              fontSize: 20.0,
+              // fontWeight: FontWeight.bold,
+            ),
+          ),
+          TextSpan(
+            text: '(to split: \$$totalSplit)',
+            style: const TextStyle(
+              color: Colors.red,
+              fontFamily: 'Raleway',
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

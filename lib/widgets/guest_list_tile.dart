@@ -73,39 +73,27 @@ class _GuestListTileState extends State<GuestListTile> {
           onTap: _deleteGuest,
         ),
       ],
-      // TODO
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.red),
-        ),
-        child: Flex(
-          direction: Axis.horizontal,
-          children: <Widget>[
-            Flexible(
-              flex: 3,
-              child: Icon(
-                FontAwesomeIcons.userAlt,
-                color: widget.guest.color ?? Colors.black,
-              ),
-              // child: CircleAvatar(
-              //   backgroundColor: widget.guest.color ?? Colors.black,
-              // ),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Flexible(
+            flex: 3,
+            child: Icon(
+              FontAwesomeIcons.userAlt,
+              color: widget.guest.color ?? Colors.black,
             ),
-            const Spacer(
-              flex: 1,
-            ),
-            Flexible(
-              flex: 18,
-              // TODO
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.red),
-                ),
-                child: _buildNameTextField(widget.guest),
-              ),
-            ),
-          ],
-        ),
+            // child: CircleAvatar(
+            //   backgroundColor: widget.guest.color ?? Colors.black,
+            // ),
+          ),
+          const Spacer(
+            flex: 1,
+          ),
+          Expanded(
+            flex: 33,
+            child: _buildNameTextField(widget.guest),
+          ),
+        ],
       ),
     );
   }
