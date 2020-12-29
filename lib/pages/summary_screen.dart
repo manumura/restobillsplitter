@@ -17,12 +17,14 @@ class SummaryScreen extends HookWidget {
   Widget build(BuildContext context) {
     final BillModel bill = useProvider(billStateNotifierProvider.state);
     final List<GuestModel> guests = bill.guests;
-    final double total = bill.total;
-    final double totalSplit = bill.totalSplit;
+    final String totalAsString =
+        bill.totalWithTax?.toStringAsFixed(2) ?? '0.00';
+    final String totalSplitAsString =
+        bill.totalWithTaxToSplit?.toStringAsFixed(2) ?? '0.00';
 
     return Scaffold(
       appBar: AppBar(
-        title: _buildTitle(total, totalSplit),
+        title: _buildTitle(totalAsString, totalSplitAsString),
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
       body: guests.isEmpty
@@ -47,7 +49,7 @@ class SummaryScreen extends HookWidget {
     );
   }
 
-  Widget _buildTitle(double total, double totalSplit) {
+  Widget _buildTitle(String total, String totalSplit) {
     return RichText(
       text: TextSpan(
         children: <InlineSpan>[

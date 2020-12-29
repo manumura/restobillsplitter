@@ -1,27 +1,44 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 
 class GuestModel {
-  GuestModel(
-      {@required this.uuid,
-      @required this.name,
-      @required this.color,
-      @required this.total})
-      : assert(uuid != null && name != null && color != null && total != null);
+  GuestModel({
+    @required this.uuid,
+    @required this.name,
+    @required this.color,
+    this.total,
+    this.totalWithTax,
+  }) : assert(uuid != null && name != null && color != null);
 
   factory GuestModel.cloneWithCalculatedTotal(
-      GuestModel guest, List<DishModel> dishes) {
+      GuestModel guest, BillModel bill) {
     if (guest == null) {
       return null;
     }
 
-    final double guestTotal = _calculateTotal(guest, dishes);
+    print('For guest ${guest.name}');
+    final double guestTotal = _calculateTotal(guest, bill.dishes);
+    print('total $guestTotal');
+    // Round to 2 decimals
+    final double guestTotalRounded =
+        double.parse(guestTotal.toStringAsFixed(2));
+
+    final double guestTotalWithTax = bill.isSplitTaxEqually
+        ? _calculateTotalWithTaxSplitEqually(guestTotal, bill.taxSplitEqually)
+        : _calculateTotalWithTax(guestTotal, bill.tax);
+    print('total with tax $guestTotalWithTax');
+    // Round to 2 decimals
+    final double guestTotalWithTaxRounded =
+        double.parse(guestTotalWithTax.toStringAsFixed(2));
+
     return GuestModel(
       uuid: guest.uuid,
       name: guest.name,
       color: guest.color,
-      total: guestTotal,
+      total: guestTotalRounded,
+      totalWithTax: guestTotalWithTaxRounded,
     );
   }
 
@@ -29,13 +46,13 @@ class GuestModel {
   String name;
   Color color;
   double total;
+  double totalWithTax;
 
   static double _calculateTotal(GuestModel guest, List<DishModel> dishes) {
     if (dishes == null) {
       return 0.0;
     }
 
-    print('For guest ${guest.name}');
     double guestTotal = 0.0;
     for (final DishModel dish in dishes) {
       final double totalForDish = _calculateTotalPerDish(guest, dish);
@@ -43,9 +60,25 @@ class GuestModel {
       guestTotal += totalForDish;
     }
 
-    print('total $guestTotal');
     // Round to 2 decimals
-    return double.parse(guestTotal.toStringAsFixed(2));
+    return guestTotal;
+  }
+
+  static double _calculateTotalWithTax(double total, double taxAsPercentage) {
+    if (taxAsPercentage == null ||
+        taxAsPercentage < 0 ||
+        taxAsPercentage > 100) {
+      return total;
+    }
+    return total * (1 + taxAsPercentage / 100);
+  }
+
+  static double _calculateTotalWithTaxSplitEqually(
+      double total, double taxAsAmount) {
+    if (taxAsAmount == null) {
+      return total;
+    }
+    return total + taxAsAmount;
   }
 
   static double _calculateTotalPerDish(GuestModel guest, DishModel dish) {

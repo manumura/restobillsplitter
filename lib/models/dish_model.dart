@@ -2,8 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 
 class DishModel {
-  DishModel({@required this.uuid, @required this.name, this.price, this.guests})
-      : assert(uuid != null && name != null);
+  DishModel({
+    @required this.uuid,
+    @required this.name,
+    this.price,
+    this.guests,
+  }) : assert(uuid != null && name != null);
 
   String uuid;
   String name;

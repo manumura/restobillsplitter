@@ -80,10 +80,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     }
 
     state = BillModel(
-        guests: newGuests,
-        dishes: newDishes,
-        tax: state.tax,
-        isSplitTaxEqually: state.isSplitTaxEqually);
+      guests: newGuests,
+      dishes: newDishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
     // print('new state: $state');
   }
 
@@ -108,10 +109,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     }
 
     state = BillModel(
-        guests: newGuests,
-        dishes: newDishes,
-        tax: state.tax,
-        isSplitTaxEqually: state.isSplitTaxEqually);
+      guests: newGuests,
+      dishes: newDishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
   }
 
   void addDish() {
@@ -139,10 +141,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     ];
 
     state = BillModel(
-        guests: state.guests,
-        dishes: newDishes,
-        tax: state.tax,
-        isSplitTaxEqually: state.isSplitTaxEqually);
+      guests: state.guests,
+      dishes: newDishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
   }
 
   void editDishPrice(DishModel dish, double price) {
@@ -160,13 +163,20 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     ];
 
     // Calculate total per guest for all guests
-    final List<GuestModel> newGuests = _getAllGuestsWithTotal(newDishes);
+    final BillModel bill = BillModel(
+      guests: state.guests,
+      dishes: newDishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
+    final List<GuestModel> newGuests = _getAllGuestsWithTotal(bill);
 
     state = BillModel(
-        guests: newGuests,
-        dishes: newDishes,
-        tax: state.tax,
-        isSplitTaxEqually: state.isSplitTaxEqually);
+      guests: newGuests,
+      dishes: newDishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
   }
 
   void assignGuestsToDish(DishModel dish, List<GuestModel> guests) {
@@ -184,47 +194,73 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     ];
 
     // Calculate total per guest for all guests
-    final List<GuestModel> newGuests = _getAllGuestsWithTotal(newDishes);
+    final BillModel bill = BillModel(
+      guests: state.guests,
+      dishes: newDishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
+    final List<GuestModel> newGuests = _getAllGuestsWithTotal(bill);
 
     state = BillModel(
-        guests: newGuests,
-        dishes: newDishes,
-        tax: state.tax,
-        isSplitTaxEqually: state.isSplitTaxEqually);
+      guests: newGuests,
+      dishes: newDishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
   }
 
   void removeDish(DishModel dish) {
     final List<DishModel> dishes =
         state.dishes.where((DishModel d) => d.uuid != dish.uuid).toList();
     state = BillModel(
-        guests: state.guests,
-        dishes: dishes,
-        tax: state.tax,
-        isSplitTaxEqually: state.isSplitTaxEqually);
+      guests: state.guests,
+      dishes: dishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
   }
 
   void editTax(double tax) {
+    // Calculate total per guest for all guests
+    final BillModel bill = BillModel(
+      guests: state.guests,
+      dishes: state.dishes,
+      tax: tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
+    final List<GuestModel> newGuests = _getAllGuestsWithTotal(bill);
+
     state = BillModel(
-        guests: state.guests,
+        guests: newGuests,
         dishes: state.dishes,
         tax: tax,
         isSplitTaxEqually: state.isSplitTaxEqually);
   }
 
   void editSplitTaxEqually({bool isSplitTaxEqually}) {
+    // Calculate total per guest for all guests
+    final BillModel bill = BillModel(
+      guests: state.guests,
+      dishes: state.dishes,
+      tax: state.tax,
+      isSplitTaxEqually: isSplitTaxEqually,
+    );
+    final List<GuestModel> newGuests = _getAllGuestsWithTotal(bill);
+
     state = BillModel(
-        guests: state.guests,
+        guests: newGuests,
         dishes: state.dishes,
         tax: state.tax,
         isSplitTaxEqually: isSplitTaxEqually);
   }
 
-  List<GuestModel> _getAllGuestsWithTotal(List<DishModel> currentDishes) {
+  List<GuestModel> _getAllGuestsWithTotal(BillModel bill) {
     final List<GuestModel> currentGuests = state.guests;
     final List<GuestModel> newGuests = <GuestModel>[];
     for (final GuestModel currentGuest in currentGuests) {
       final GuestModel newGuest =
-          GuestModel.cloneWithCalculatedTotal(currentGuest, currentDishes);
+          GuestModel.cloneWithCalculatedTotal(currentGuest, bill);
       newGuests.add(newGuest);
     }
 

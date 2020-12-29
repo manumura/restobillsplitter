@@ -99,8 +99,7 @@ class _DishListTileState extends State<DishListTile> {
           onTap: _deleteDish,
         ),
       ],
-      child: Flex(
-        direction: Axis.horizontal,
+      child: Row(
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Flexible(

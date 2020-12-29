@@ -16,6 +16,10 @@ class SummaryListTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String total = guest.total?.toStringAsFixed(2) ?? '0.0';
+    final String totalWithTax = guest.totalWithTax?.toStringAsFixed(2) ?? '0.0';
+    final String message = 'has to pay $totalWithTax ($total without tax)';
+
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
@@ -29,7 +33,7 @@ class SummaryListTile extends HookWidget {
           // style: TextStyle(color: Theme.of(context).primaryColor),
         ),
         subtitle: Text(
-          'has to pay \$${guest.total?.toString()}' ?? '\$0.0',
+          message,
           style: const TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,

@@ -73,8 +73,7 @@ class _GuestListTileState extends State<GuestListTile> {
           onTap: _deleteGuest,
         ),
       ],
-      child: Flex(
-        direction: Axis.horizontal,
+      child: Row(
         children: <Widget>[
           Flexible(
             flex: 3,
