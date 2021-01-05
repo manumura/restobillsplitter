@@ -55,12 +55,11 @@ class GuestModel {
 
     double guestTotal = 0.0;
     for (final DishModel dish in dishes) {
-      final double totalForDish = _calculateTotalPerDish(guest, dish);
+      final double totalForDish = dish.calculateTotalPerGuest(guest);
       print('For dish ${dish.name} : $totalForDish');
       guestTotal += totalForDish;
     }
 
-    // Round to 2 decimals
     return guestTotal;
   }
 
@@ -79,20 +78,6 @@ class GuestModel {
       return total;
     }
     return total + taxAsAmount;
-  }
-
-  // TODO move to DishModel
-  static double _calculateTotalPerDish(GuestModel guest, DishModel dish) {
-    double totalForDish = 0.0;
-    if (dish.guests == null) {
-      return totalForDish;
-    }
-
-    if (dish.guests.contains(guest) && dish.price != null) {
-      totalForDish = dish.price / dish.guests.length;
-    }
-
-    return totalForDish;
   }
 
   @override

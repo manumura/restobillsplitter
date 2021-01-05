@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/all.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
+import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
+import 'package:restobillsplitter/state/providers.dart';
 
 class SummaryListTile extends HookWidget {
   SummaryListTile({@required this.key, @required this.guest})
@@ -16,9 +19,13 @@ class SummaryListTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final BillModel bill = useProvider(billStateNotifierProvider.state);
     final String total = guest.total?.toStringAsFixed(2) ?? '0.0';
     final String totalWithTax = guest.totalWithTax?.toStringAsFixed(2) ?? '0.0';
-    final String message = 'has to pay $totalWithTax ($total without tax)';
+    String message = 'has to pay $totalWithTax';
+    if (bill.tax != null && bill.tax > 0) {
+      message += ' ($total without tax)';
+    }
 
     return Card(
       clipBehavior: Clip.antiAlias,

@@ -14,6 +14,19 @@ class DishModel {
   double price;
   List<GuestModel> guests = <GuestModel>[];
 
+  double calculateTotalPerGuest(GuestModel guest) {
+    double totalForDish = 0.0;
+    if (guests == null) {
+      return totalForDish;
+    }
+
+    if (guests.contains(guest) && price != null) {
+      totalForDish = price / guests.length;
+    }
+
+    return totalForDish;
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

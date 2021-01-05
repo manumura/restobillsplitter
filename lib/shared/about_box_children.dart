@@ -7,13 +7,22 @@ List<Widget> buildAboutBoxChildren(BuildContext context) {
     const SizedBox(
       height: 20,
     ),
-    // TODO app description
     RichText(
       text: const TextSpan(
         children: <InlineSpan>[
           TextSpan(
             text:
-                'Simple Order Manager is your Back Office for all your order management.',
+                'With Resto Bill Splitter, no more pain to split the restaurant bill with your friends !',
+            style: TextStyle(color: Colors.black),
+          ),
+        ],
+      ),
+    ),
+    RichText(
+      text: const TextSpan(
+        children: <InlineSpan>[
+          TextSpan(
+            text: 'First add some guests. Then add the dishes.',
             style: TextStyle(color: Colors.black),
           ),
         ],
@@ -24,7 +33,7 @@ List<Widget> buildAboutBoxChildren(BuildContext context) {
         children: <InlineSpan>[
           TextSpan(
             text:
-                'You can easily create categories and products by category. Then just simply add your products to the order.',
+                'You can then assign the dishes to the guests, and enter the tax.',
             style: TextStyle(color: Colors.black),
           ),
         ],
@@ -34,18 +43,7 @@ List<Widget> buildAboutBoxChildren(BuildContext context) {
       text: const TextSpan(
         children: <InlineSpan>[
           TextSpan(
-            text:
-                'Mark the order completed to keep track of all your past orders.',
-            style: TextStyle(color: Colors.black),
-          ),
-        ],
-      ),
-    ),
-    RichText(
-      text: const TextSpan(
-        children: <InlineSpan>[
-          TextSpan(
-            text: 'No more pen and paper, everything is in your pocket !',
+            text: 'The share for each guest is automatically calculated !',
             style: TextStyle(color: Colors.black),
           ),
         ],
