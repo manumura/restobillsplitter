@@ -1,5 +1,9 @@
-// guest summary details
+// guest summary details : add dishes property to guest
 // splash screen + launch icon
+
+// reorderable list
+// https://www.youtube.com/watch?v=l5pjmhWpdmI&ab_channel=CodingWithChip
+// https://medium.com/@adp4infotech4/flutter-building-a-reorderable-listview-735013719cf3
 
 // https://apetools.webprofusion.com/#/tools/imagegorilla
 // https://redketchup.io/image-resizer
