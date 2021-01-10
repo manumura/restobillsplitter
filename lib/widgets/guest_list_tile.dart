@@ -135,20 +135,13 @@ class _GuestListTileState extends State<GuestListTile> {
         fillColor: Colors.white,
         // floatingLabelBehavior: FloatingLabelBehavior.never,
       ),
-      onChanged: (String value) {
-        // TODO
-        print('changed');
-      },
       onEditingComplete: () {
-        // TODO
-        print('complete');
         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
     );
   }
 
   void _saveGuestName(String name) {
-    print('lost focus: $name');
     if (name != null) {
       billStateNotifier.editGuest(
         GuestModel(

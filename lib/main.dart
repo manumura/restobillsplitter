@@ -28,7 +28,6 @@ void main() {
   runZonedGuarded(() {
     runApp(MyApp());
   }, (Object error, StackTrace stackTrace) {
-    print('runZonedGuarded: Caught error in my root zone.');
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 

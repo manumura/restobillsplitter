@@ -10,35 +10,6 @@ class GuestModel {
     @required this.dishes,
   }) : assert(uuid != null && name != null && color != null && dishes != null);
 
-  // factory GuestModel.cloneWithCalculatedTotal(
-  //     GuestModel guest, BillModel bill) {
-  //   if (guest == null) {
-  //     return null;
-  //   }
-  //
-  //   print('For guest ${guest.name}');
-  //   final double guestTotal = _calculateTotal(guest, bill.dishes);
-  //   print('total $guestTotal');
-  //   // Round to 2 decimals
-  //   final double guestTotalRounded =
-  //       double.parse(guestTotal.toStringAsFixed(2));
-  //
-  //   final double guestTotalWithTax = bill.isSplitTaxEqually
-  //       ? _calculateTotalWithTaxSplitEqually(guestTotal, bill.taxSplitEqually)
-  //       : _calculateTotalWithTax(guestTotal, bill.tax);
-  //   print('total with tax $guestTotalWithTax');
-  //   // Round to 2 decimals
-  //   final double guestTotalWithTaxRounded =
-  //       double.parse(guestTotalWithTax.toStringAsFixed(2));
-  //
-  //   return GuestModel(
-  //     uuid: guest.uuid,
-  //     name: guest.name,
-  //     color: guest.color,
-  //     dishes: guest.dishes,
-  //   );
-  // }
-
   String uuid;
   String name;
   Color color;
@@ -47,8 +18,7 @@ class GuestModel {
   double get total {
     double total = 0.0;
     for (final DishModel dish in dishes) {
-      // TODO calculate total
-      final double totalForDish = dish.price; // / dish.guestUuids?.length ?? 1;
+      final double totalForDish = dish.price / dish.guestUuids.length;
       total += totalForDish;
     }
     return total;
@@ -62,7 +32,7 @@ class GuestModel {
     return guestTotalWithTax;
   }
 
-  static double _calculateTotalWithTax(double total, double taxAsPercentage) {
+  double _calculateTotalWithTax(double total, double taxAsPercentage) {
     if (taxAsPercentage == null ||
         taxAsPercentage < 0 ||
         taxAsPercentage > 100) {
@@ -71,8 +41,7 @@ class GuestModel {
     return total * (1 + taxAsPercentage / 100);
   }
 
-  static double _calculateTotalWithTaxSplitEqually(
-      double total, double taxAsAmount) {
+  double _calculateTotalWithTaxSplitEqually(double total, double taxAsAmount) {
     if (taxAsAmount == null) {
       return total;
     }

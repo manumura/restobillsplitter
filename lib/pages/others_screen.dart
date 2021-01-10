@@ -81,14 +81,13 @@ class _OtherScreenState extends State<OthersScreen> {
   }
 
   Widget _buildTaxTextField() {
-    print('_buildTaxTextField');
     return TextField(
       maxLength: 5,
       controller: _taxTextController,
       focusNode: _taxFocusNode,
       inputFormatters: <TextInputFormatter>[
-        // TODO https://medium.com/flutter-community/input-formatting-flutter-5237bf09e61f
-        //https://stackoverflow.com/questions/54454983/allow-only-two-decimal-number-in-flutter-input/54456978
+        // https://medium.com/flutter-community/input-formatting-flutter-5237bf09e61f
+        // https://stackoverflow.com/questions/54454983/allow-only-two-decimal-number-in-flutter-input/54456978
         FilteringTextInputFormatter.allow(
           RegExp(r'^(\d+)?\.?\d{0,2}'),
         ),
@@ -122,13 +121,7 @@ class _OtherScreenState extends State<OthersScreen> {
         filled: true,
         fillColor: Colors.white,
       ),
-      onChanged: (String value) {
-        // TODO
-        print('tax changed');
-      },
       onEditingComplete: () {
-        // TODO
-        print('tax complete');
         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
     );

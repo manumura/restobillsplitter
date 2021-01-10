@@ -71,14 +71,12 @@ class _DishListTileState extends State<DishListTile> {
 
   void _editDishName() {
     if (!_nameFocusNode.hasFocus) {
-      print('name lost focus: ${_nameTextController.text}');
       _saveDishName(_nameTextController.text);
     }
   }
 
   void _editDishPrice() {
     if (!_priceFocusNode.hasFocus) {
-      print('price lost focus: ${_priceTextController.text}');
       final double price = double.tryParse(
               _priceTextController.text.replaceFirst(RegExp(r','), '.')) ??
           0.00;
@@ -150,13 +148,7 @@ class _DishListTileState extends State<DishListTile> {
         filled: true,
         fillColor: Colors.white,
       ),
-      onChanged: (String value) {
-        // TODO
-        print('name changed');
-      },
       onEditingComplete: () {
-        // TODO
-        print('name complete');
         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
     );
@@ -168,8 +160,8 @@ class _DishListTileState extends State<DishListTile> {
       controller: _priceTextController,
       focusNode: _priceFocusNode,
       inputFormatters: <TextInputFormatter>[
-        // TODO https://medium.com/flutter-community/input-formatting-flutter-5237bf09e61f
-        //https://stackoverflow.com/questions/54454983/allow-only-two-decimal-number-in-flutter-input/54456978
+        // https://medium.com/flutter-community/input-formatting-flutter-5237bf09e61f
+        // https://stackoverflow.com/questions/54454983/allow-only-two-decimal-number-in-flutter-input/54456978
         FilteringTextInputFormatter.allow(
           RegExp(r'^(\d+)?\.?\d{0,2}'),
         ),
@@ -203,13 +195,7 @@ class _DishListTileState extends State<DishListTile> {
         filled: true,
         fillColor: Colors.white,
       ),
-      onChanged: (String value) {
-        // TODO
-        print('price changed');
-      },
       onEditingComplete: () {
-        // TODO
-        print('price complete');
         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
     );
@@ -237,9 +223,8 @@ class _DishListTileState extends State<DishListTile> {
         price: price,
         guestUuids: widget.dish.guestUuids,
       );
-      billStateNotifier.editDishPrice(
+      billStateNotifier.editDish(
         dish,
-        price,
       );
     }
   }

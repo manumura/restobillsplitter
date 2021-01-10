@@ -154,6 +154,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
       'Dish name',
       'Price',
     ]);
+    if (bill.tax != null && bill.tax > 0) {
+      dishesHeader.add('Price with tax (${bill.tax}%)');
+    }
     rows.add(dishesHeader);
 
     for (int i = 0; i < bill.dishes.length; i++) {
@@ -162,6 +165,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
       final DishModel dish = bill.dishes[i];
       row.add(dish.name);
       row.add(dish.price);
+      if (bill.tax != null && bill.tax > 0) {
+        row.add(dish.getPriceWithTax(taxAsPercentage: bill.tax));
+      }
 
       rows.add(row);
     }

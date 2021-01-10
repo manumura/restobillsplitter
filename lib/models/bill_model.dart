@@ -99,7 +99,6 @@ class BillModel {
     }
 
     final double taxSplitEqually = (total * tax / 100) / guests.length;
-    print('taxSplitEqually : $taxSplitEqually');
     // Round to 2 decimals
     return double.parse(taxSplitEqually.toStringAsFixed(2));
   }

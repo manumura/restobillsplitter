@@ -13,6 +13,15 @@ class DishModel {
   double price;
   List<String> guestUuids = <String>[];
 
+  double getPriceWithTax({@required double taxAsPercentage}) {
+    if (taxAsPercentage == null ||
+        taxAsPercentage < 0 ||
+        taxAsPercentage > 100) {
+      return price;
+    }
+    return price * (1 + taxAsPercentage / 100);
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

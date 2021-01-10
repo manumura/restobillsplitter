@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/all.dart';
+import 'package:logger/logger.dart';
+import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
@@ -8,31 +10,25 @@ import 'package:uuid/uuid.dart';
 
 class BillStateNotifier extends StateNotifier<BillModel> {
   BillStateNotifier([BillModel initialBill])
-      : super(initialBill ??
-            BillModel(
-              guests: <GuestModel>[],
-              dishes: <DishModel>[],
-              tax: 0.0,
-              isSplitTaxEqually: false,
-            ));
+      : super(
+          initialBill ??
+              BillModel(
+                guests: <GuestModel>[],
+                dishes: <DishModel>[],
+                tax: 0.0,
+                isSplitTaxEqually: false,
+              ),
+        );
+
+  final Logger logger = getLogger();
+
+  int _nextGuestIndex = 1;
+  int _nextDishIndex = 1;
 
   void addGuest() {
-    // TODO
-    final int nextIndex = state.guests.length + 1;
+    final int nextIndex = _nextGuestIndex;
+    _nextGuestIndex++;
     final Uuid uuid = Uuid();
-    // final RandomColor randomColor = RandomColor();
-    // final Color color = randomColor.randomColor(
-    //   colorSaturation: ColorSaturation.mediumSaturation,
-    //   colorBrightness: ColorBrightness.primary,
-    //   colorHue: ColorHue.multiple(
-    //     colorHues: <ColorHue>[
-    //       ColorHue.red,
-    //       ColorHue.blue,
-    //       ColorHue.green,
-    //       ColorHue.yellow,
-    //     ],
-    //   ),
-    // );
     final Color color = Colors.primaries[nextIndex % Colors.primaries.length];
     final GuestModel guestToAdd = GuestModel(
       uuid: uuid.v4(),
@@ -57,45 +53,15 @@ class BillStateNotifier extends StateNotifier<BillModel> {
           g,
     ];
 
-    // Modify assigned dishes with new guest
-    // final List<DishModel> newDishes = <DishModel>[];
-    // if (state.dishes != null) {
-    //   for (final DishModel d in state.dishes) {
-    //     if (d.guests == null) {
-    //       continue;
-    //     }
-    //
-    //     final List<GuestModel> guests = <GuestModel>[];
-    //     for (final GuestModel g in d.guests) {
-    //       final GuestModel guestToAdd = g.uuid == guest.uuid
-    //           ? GuestModel(
-    //               uuid: guest.uuid,
-    //               name: guest.name,
-    //               color: guest.color,
-    //               dishes: guest.dishes,
-    //             )
-    //           : g;
-    //       guests.add(guestToAdd);
-    //     }
-    //     final DishModel dishToAdd = DishModel(
-    //         uuid: d.uuid, name: d.name, price: d.price, guests: guests);
-    //     newDishes.add(dishToAdd);
-    //   }
-    // }
-
     state = BillModel(
       guests: newGuests,
       dishes: state.dishes,
       tax: state.tax,
       isSplitTaxEqually: state.isSplitTaxEqually,
     );
-    // print('new state: $state');
   }
 
   void removeGuest(GuestModel guest) {
-    final List<GuestModel> newGuests =
-        state.guests.where((GuestModel g) => g.uuid != guest.uuid).toList();
-
     // Remove guest from assigned dishes
     final List<DishModel> newDishes = <DishModel>[];
     if (state.dishes != null) {
@@ -106,14 +72,42 @@ class BillStateNotifier extends StateNotifier<BillModel> {
 
         final List<String> guestUuids =
             d.guestUuids.where((String uuid) => uuid != guest.uuid).toList();
-        final DishModel dishToAdd = DishModel(
+        final DishModel newDish = DishModel(
             uuid: d.uuid, name: d.name, price: d.price, guestUuids: guestUuids);
-        newDishes.add(dishToAdd);
+        newDishes.add(newDish);
       }
     }
 
+    final List<GuestModel> newGuests =
+        state.guests.where((GuestModel g) => g.uuid != guest.uuid).toList();
+
+    // Update new guests dishes
+    final List<GuestModel> newGuestsWithUpdatedDishes = <GuestModel>[];
+    for (final GuestModel g in newGuests) {
+      final List<DishModel> newGuestDishes = <DishModel>[];
+      for (final DishModel d in g.dishes) {
+        if (d.guestUuids == null) {
+          continue;
+        }
+
+        final List<String> guestUuids =
+            d.guestUuids.where((String uuid) => uuid != guest.uuid).toList();
+        final DishModel newGuestDish = DishModel(
+            uuid: d.uuid, name: d.name, price: d.price, guestUuids: guestUuids);
+        newGuestDishes.add(newGuestDish);
+      }
+
+      final GuestModel newGuestWithUpdatedDishes = GuestModel(
+        uuid: g.uuid,
+        name: g.name,
+        color: g.color,
+        dishes: newGuestDishes,
+      );
+      newGuestsWithUpdatedDishes.add(newGuestWithUpdatedDishes);
+    }
+
     state = BillModel(
-      guests: newGuests,
+      guests: newGuestsWithUpdatedDishes,
       dishes: newDishes,
       tax: state.tax,
       isSplitTaxEqually: state.isSplitTaxEqually,
@@ -122,15 +116,14 @@ class BillStateNotifier extends StateNotifier<BillModel> {
 
   void addDish() {
     final Uuid uuid = Uuid();
-    // TODO
-    final int nextIndex = state.dishes.length + 1;
+    final int nextIndex = _nextDishIndex;
+    _nextDishIndex++;
     final DishModel dishToAdd =
         DishModel(uuid: uuid.v4(), name: 'Dish$nextIndex');
     state = state..dishes.add(dishToAdd);
   }
 
   void editDish(DishModel dish) {
-    print('new dish: $dish');
     final List<DishModel> newDishes = <DishModel>[
       for (final DishModel d in state.dishes)
         if (d.uuid == dish.uuid)
@@ -144,42 +137,39 @@ class BillStateNotifier extends StateNotifier<BillModel> {
           d,
     ];
 
-    // TODO edit dishes in guests
+    final List<GuestModel> newGuests = <GuestModel>[];
+    for (final GuestModel guest in state.guests) {
+      if (guest.dishes != null && guest.dishes.contains(dish)) {
+        final List<DishModel> guestDishes = <DishModel>[
+          for (final DishModel d in guest.dishes)
+            if (d.uuid == dish.uuid)
+              DishModel(
+                uuid: dish.uuid,
+                name: dish.name,
+                price: dish.price,
+                guestUuids: dish.guestUuids,
+              )
+            else
+              d,
+        ];
 
-    state = BillModel(
-      guests: state.guests,
-      dishes: newDishes,
-      tax: state.tax,
-      isSplitTaxEqually: state.isSplitTaxEqually,
-    );
-  }
-
-  // TODO edit remove and use editDish
-  void editDishPrice(DishModel dish, double price) {
-    final List<DishModel> newDishes = <DishModel>[
-      for (final DishModel d in state.dishes)
-        if (d.uuid == dish.uuid)
-          DishModel(
-            uuid: d.uuid,
-            name: d.name,
-            price: price,
-            guestUuids: d.guestUuids,
-          )
-        else
-          d,
-    ];
-
-    // TODO edit dishes in guests
-    final List<GuestModel> newGuests = state.guests;
-
-    // Calculate total per guest for all guests
-    // final BillModel bill = BillModel(
-    //   guests: state.guests,
-    //   dishes: newDishes,
-    //   tax: state.tax,
-    //   isSplitTaxEqually: state.isSplitTaxEqually,
-    // );
-    // final List<GuestModel> newGuests = _getAllGuestsWithTotal(bill);
+        final GuestModel newGuest = GuestModel(
+          uuid: guest.uuid,
+          name: guest.name,
+          color: guest.color,
+          dishes: guestDishes,
+        );
+        newGuests.add(newGuest);
+      } else {
+        final GuestModel newGuest = GuestModel(
+          uuid: guest.uuid,
+          name: guest.name,
+          color: guest.color,
+          dishes: guest.dishes,
+        );
+        newGuests.add(newGuest);
+      }
+    }
 
     state = BillModel(
       guests: newGuests,
@@ -190,31 +180,41 @@ class BillStateNotifier extends StateNotifier<BillModel> {
   }
 
   void removeDish(DishModel dish) {
-    final List<DishModel> dishes =
+    final List<DishModel> newDishes =
         state.dishes.where((DishModel d) => d.uuid != dish.uuid).toList();
 
-    // TODO edit dishes in guests
+    // Remove dish in guests
+    final List<GuestModel> newGuests = <GuestModel>[];
+    for (final GuestModel guest in state.guests) {
+      final List<DishModel> newGuestDishes =
+          guest.dishes.where((DishModel d) => d.uuid != dish.uuid).toList();
+      final GuestModel newGuest = GuestModel(
+        uuid: guest.uuid,
+        name: guest.name,
+        color: guest.color,
+        dishes: newGuestDishes,
+      );
+      newGuests.add(newGuest);
+    }
 
     state = BillModel(
-      guests: state.guests,
-      dishes: dishes,
+      guests: newGuests,
+      dishes: newDishes,
       tax: state.tax,
       isSplitTaxEqually: state.isSplitTaxEqually,
     );
   }
 
   void assignGuestsToDish(DishModel dish, List<GuestModel> assignedGuests) {
+    final DishModel newDish = DishModel(
+      uuid: dish.uuid,
+      name: dish.name,
+      price: dish.price,
+      guestUuids: assignedGuests.map((GuestModel g) => g.uuid).toList(),
+    );
     final List<DishModel> newDishes = <DishModel>[
       for (final DishModel d in state.dishes)
-        if (d.uuid == dish.uuid)
-          DishModel(
-            uuid: d.uuid,
-            name: d.name,
-            price: d.price,
-            guestUuids: assignedGuests.map((GuestModel g) => g.uuid).toList(),
-          )
-        else
-          d,
+        if (d.uuid == dish.uuid) newDish else d,
     ];
 
     final List<GuestModel> newGuests = <GuestModel>[];
@@ -238,7 +238,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         final List<DishModel> dishes = currentGuest.dishes;
         if (assignedGuests != null && assignedGuests.contains(currentGuest)) {
           // Assign guest
-          dishes.add(dish);
+          dishes.add(newDish);
         }
 
         final GuestModel newGuest = GuestModel(
@@ -251,17 +251,6 @@ class BillStateNotifier extends StateNotifier<BillModel> {
       }
     }
 
-    print('newGuests: $newGuests');
-
-    // Calculate total per guest for all guests
-    // final BillModel bill = BillModel(
-    //   guests: state.guests,
-    //   dishes: newDishes,
-    //   tax: state.tax,
-    //   isSplitTaxEqually: state.isSplitTaxEqually,
-    // );
-    // final List<GuestModel> newGuestsWithTotal = _getAllGuestsWithTotal(bill);
-
     state = BillModel(
       guests: newGuests,
       dishes: newDishes,
@@ -271,15 +260,6 @@ class BillStateNotifier extends StateNotifier<BillModel> {
   }
 
   void editTax(double tax) {
-    // Calculate total per guest for all guests
-    // final BillModel bill = BillModel(
-    //   guests: state.guests,
-    //   dishes: state.dishes,
-    //   tax: tax,
-    //   isSplitTaxEqually: state.isSplitTaxEqually,
-    // );
-    // final List<GuestModel> newGuests = _getAllGuestsWithTotal(bill);
-
     state = BillModel(
         guests: state.guests,
         dishes: state.dishes,
@@ -288,15 +268,6 @@ class BillStateNotifier extends StateNotifier<BillModel> {
   }
 
   void editSplitTaxEqually({bool isSplitTaxEqually}) {
-    // Calculate total per guest for all guests
-    // final BillModel bill = BillModel(
-    //   guests: state.guests,
-    //   dishes: state.dishes,
-    //   tax: state.tax,
-    //   isSplitTaxEqually: isSplitTaxEqually,
-    // );
-    // final List<GuestModel> newGuests = _getAllGuestsWithTotal(bill);
-
     state = BillModel(
         guests: state.guests,
         dishes: state.dishes,
@@ -304,21 +275,9 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         isSplitTaxEqually: isSplitTaxEqually);
   }
 
-  // List<GuestModel> _getAllGuestsWithTotal(BillModel bill) {
-  //   final List<GuestModel> currentGuests = state.guests;
-  //   final List<GuestModel> newGuests = <GuestModel>[];
-  //   for (final GuestModel currentGuest in currentGuests) {
-  //     final GuestModel newGuest =
-  //         GuestModel.cloneWithCalculatedTotal(currentGuest, bill);
-  //     newGuests.add(newGuest);
-  //   }
-  //
-  //   return newGuests;
-  // }
-
   @override
   void dispose() {
-    print('dispose');
+    logger.d('DISPOSE BillStateNotifier');
     super.dispose();
   }
 }

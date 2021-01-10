@@ -69,7 +69,6 @@ class _HomeScreenScreenState extends State<HomeScreen>
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: (int index) {
-              print('switch $index');
               _pageController.animateToPage(
                 index,
                 curve: Curves.easeInOut,
