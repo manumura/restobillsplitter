@@ -20,11 +20,16 @@ class SummaryListTile extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final BillModel bill = useProvider(billStateNotifierProvider.state);
-    final String total = guest.total?.toStringAsFixed(2) ?? '0.0';
-    final String totalWithTax = guest.totalWithTax?.toStringAsFixed(2) ?? '0.0';
-    String message = 'has to pay $totalWithTax';
+    final String totalAsString = guest.total?.toStringAsFixed(2) ?? '0.0';
+    final double totalWithTax = guest.getTotalWithTax(
+      isSplitTaxEqually: bill.isSplitTaxEqually,
+      tax: bill.tax,
+    );
+    final String totalWithTaxAsString =
+        totalWithTax?.toStringAsFixed(2) ?? '0.0';
+    String message = 'has to pay $totalWithTaxAsString';
     if (bill.tax != null && bill.tax > 0) {
-      message += ' ($total without tax)';
+      message += ' ($totalAsString without tax)';
     }
 
     return Card(

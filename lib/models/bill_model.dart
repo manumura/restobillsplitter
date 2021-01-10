@@ -80,11 +80,13 @@ class BillModel {
 
     double totalWithTax = 0.0;
     for (final GuestModel guest in guests) {
-      if (guest.totalWithTax == null) {
+      final double guestTotal =
+          guest.getTotalWithTax(isSplitTaxEqually: isSplitTaxEqually, tax: tax);
+      if (total == null) {
         continue;
       }
 
-      totalWithTax += guest.totalWithTax;
+      totalWithTax += guestTotal;
     }
 
     // Round to 2 decimals

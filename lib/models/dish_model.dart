@@ -1,31 +1,17 @@
 import 'package:flutter/cupertino.dart';
-import 'package:restobillsplitter/models/guest_model.dart';
 
 class DishModel {
   DishModel({
     @required this.uuid,
     @required this.name,
     this.price,
-    this.guests,
+    this.guestUuids,
   }) : assert(uuid != null && name != null);
 
   String uuid;
   String name;
   double price;
-  List<GuestModel> guests = <GuestModel>[];
-
-  double calculateTotalPerGuest(GuestModel guest) {
-    double totalForDish = 0.0;
-    if (guests == null) {
-      return totalForDish;
-    }
-
-    if (guests.contains(guest) && price != null) {
-      totalForDish = price / guests.length;
-    }
-
-    return totalForDish;
-  }
+  List<String> guestUuids = <String>[];
 
   @override
   bool operator ==(Object other) =>
@@ -39,7 +25,6 @@ class DishModel {
 
   @override
   String toString() {
-    return 'DishModel{uuid: $uuid, name: $name, price: $price, guests: '
-        '$guests}';
+    return 'DishModel{uuid: $uuid, name: $name, price: $price, guestUuids: $guestUuids}';
   }
 }

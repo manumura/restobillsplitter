@@ -32,8 +32,8 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
     guests = bill.guests;
 
     for (final GuestModel guest in guests) {
-      final bool isGuestSelected =
-          widget.dish.guests != null && widget.dish.guests.contains(guest);
+      final bool isGuestSelected = widget.dish.guestUuids != null &&
+          widget.dish.guestUuids.contains(guest.uuid);
       _selectedMap[guest] = isGuestSelected;
       _isSelectEveryoneChecked = _isSelectEveryoneChecked && isGuestSelected;
     }

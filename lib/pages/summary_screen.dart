@@ -128,7 +128,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
       row.add(guest.name);
       row.add(guest.total);
       if (bill.tax != null && bill.tax > 0) {
-        row.add(guest.totalWithTax);
+        row.add(guest.getTotalWithTax(
+          isSplitTaxEqually: bill.isSplitTaxEqually,
+          tax: bill.tax,
+        ));
       }
 
       rows.add(row);

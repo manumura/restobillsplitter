@@ -221,7 +221,7 @@ class _DishListTileState extends State<DishListTile> {
         uuid: widget.dish.uuid,
         name: name,
         price: widget.dish.price,
-        guests: widget.dish.guests,
+        guestUuids: widget.dish.guestUuids,
       );
       billStateNotifier.editDish(
         dish,
@@ -235,7 +235,7 @@ class _DishListTileState extends State<DishListTile> {
         uuid: widget.dish.uuid,
         name: widget.dish.name,
         price: price,
-        guests: widget.dish.guests,
+        guestUuids: widget.dish.guestUuids,
       );
       billStateNotifier.editDishPrice(
         dish,
