@@ -6,8 +6,7 @@ import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
-
-import 'file:///E:/Manu/DEV/flutterworkspace/flutter_resto_bill_splitter/lib/widgets/guest_list_tile.dart';
+import 'package:restobillsplitter/widgets/guest_list_tile.dart';
 
 class GuestListScreen extends HookWidget {
   static const String routeName = '/guest_list';
@@ -43,17 +42,6 @@ class GuestListScreen extends HookWidget {
                 thickness: 2.0,
               ),
             ),
-      // bottomNavigationBar: BottomAppBar(
-      //   shape: const CircularNotchedRectangle(),
-      //   elevation: 1.0,
-      //   notchMargin: 1.0,
-      //   child: Text('Bottom'),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => _addGuest(context),
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 

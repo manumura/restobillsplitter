@@ -7,8 +7,7 @@ import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
-
-import 'file:///E:/Manu/DEV/flutterworkspace/flutter_resto_bill_splitter/lib/widgets/assign_dish_list_tile.dart';
+import 'package:restobillsplitter/widgets/assign_dish_list_tile.dart';
 
 class AssignScreen extends HookWidget {
   static const String routeName = '/assign';

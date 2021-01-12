@@ -6,8 +6,7 @@ import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
-
-import 'file:///E:/Manu/DEV/flutterworkspace/flutter_resto_bill_splitter/lib/widgets/dish_list_tile.dart';
+import 'package:restobillsplitter/widgets/dish_list_tile.dart';
 
 class DishListScreen extends HookWidget {
   static const String routeName = '/dish_list';
@@ -43,17 +42,6 @@ class DishListScreen extends HookWidget {
                 thickness: 2.0,
               ),
             ),
-      // bottomNavigationBar: BottomAppBar(
-      //   shape: const CircularNotchedRectangle(),
-      //   elevation: 1.0,
-      //   notchMargin: 1.0,
-      //   child: Text('Bottom'),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => _addGuest(context),
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 

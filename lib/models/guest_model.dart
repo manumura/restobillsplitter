@@ -18,7 +18,9 @@ class GuestModel {
   double get total {
     double total = 0.0;
     for (final DishModel dish in dishes) {
-      final double totalForDish = dish.price / dish.guestUuids.length;
+      final double totalForDish = dish != null && dish.price != null
+          ? dish.price / dish.guestUuids.length
+          : 0;
       total += totalForDish;
     }
     return total;

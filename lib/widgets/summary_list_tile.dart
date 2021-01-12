@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
+import 'package:restobillsplitter/pages/summary_guest_details_screen.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class SummaryListTile extends HookWidget {
@@ -27,9 +29,9 @@ class SummaryListTile extends HookWidget {
     );
     final String totalWithTaxAsString =
         totalWithTax?.toStringAsFixed(2) ?? '0.0';
-    String message = 'has to pay $totalWithTaxAsString';
+    String message = 'has to pay \$$totalWithTaxAsString';
     if (bill.tax != null && bill.tax > 0) {
-      message += ' ($totalAsString without tax)';
+      message += ' (\$$totalAsString without tax)';
     }
 
     return Card(
@@ -51,7 +53,19 @@ class SummaryListTile extends HookWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        trailing: const Icon(FontAwesomeIcons.chevronRight),
+        onTap: () => _showGuestDetails(context, guest),
         // trailing: _buildSelectGuestButton(context, dish),
+      ),
+    );
+  }
+
+  void _showGuestDetails(BuildContext context, GuestModel guest) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        settings:
+            const RouteSettings(name: SummaryGuestDetailsScreen.routeName),
+        builder: (BuildContext context) => SummaryGuestDetailsScreen(guest),
       ),
     );
   }
