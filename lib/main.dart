@@ -21,7 +21,7 @@ import 'package:restobillsplitter/shared/adapative_progress_indicator.dart';
 import 'package:restobillsplitter/shared/adaptive_theme.dart';
 
 // Toggle this for testing Crashlytics in your app locally.
-const bool _kTestingCrashlytics = true;
+const bool _kTestingCrashlytics = false;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

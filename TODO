@@ -2,6 +2,7 @@
 // https://www.youtube.com/watch?v=l5pjmhWpdmI&ab_channel=CodingWithChip
 // https://medium.com/@adp4infotech4/flutter-building-a-reorderable-listview-735013719cf3
 
+// ./keytool -exportcert -list -v -alias key -keystore key.jks
 // https://apetools.webprofusion.com/#/tools/imagegorilla
 // https://redketchup.io/image-resizer
 // https://svgsilh.com/svgedit/editor/svg-editor.html?url=/svg/157901.svg
