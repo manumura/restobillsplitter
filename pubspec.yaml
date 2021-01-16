@@ -29,18 +29,18 @@ dependencies:
   cupertino_icons: ^1.0.0
 
   csv: ^4.1.0
-  firebase_analytics: ^6.3.0
-  firebase_crashlytics: ^0.2.4
+  firebase_analytics: ^7.0.1
+  firebase_crashlytics: ^0.4.0+1
   flutter_hooks: ^0.15.0
-  flutter_markdown: ^0.5.1
+  flutter_markdown: ^0.5.2
   flutter_slidable: ^0.5.7
 #  flutter_sticky_header: ^0.5.0
   font_awesome_flutter: ^8.11.0
-  hooks_riverpod: ^0.12.1
+  hooks_riverpod: ^0.12.2
   intl: ^0.16.1
   logger: ^0.9.4
   package_info: ^0.4.3+2
-  path_provider: ^1.6.24
+  path_provider: ^1.6.27
   random_color: ^1.0.5
   share: ^0.6.5+4
   url_launcher: ^5.7.10

@@ -15,7 +15,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
               BillModel(
                 guests: <GuestModel>[],
                 dishes: <DishModel>[],
-                tax: 0.0,
+                tax: 0,
                 isSplitTaxEqually: false,
               ),
         );

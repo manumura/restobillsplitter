@@ -139,7 +139,7 @@ class _OtherScreenState extends State<OthersScreen> {
     if (!_taxFocusNode.hasFocus) {
       final double tax = double.tryParse(
               _taxTextController.text.replaceFirst(RegExp(r','), '.')) ??
-          0.0;
+          0;
 
       final bool isValid = _validateTax(tax);
       if (isValid) {
