@@ -101,6 +101,7 @@ class _MyAppState extends State<MyApp> {
         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
       child: MaterialApp(
+        // debugShowCheckedModeBanner: false,
         title: "Rest\'O Bill Splitter",
         theme: getAdaptiveThemeData(context),
         // home: HomeScreen(),
