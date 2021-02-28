@@ -48,8 +48,8 @@ class _GuestListScreenState extends State<GuestListScreen> {
 
     return Scaffold(
       drawer: SideDrawer(),
-      appBar: CustomAppBar(
-        const Text('Guests'),
+      appBar: const CustomAppBar(
+        Text('Guests'),
       ),
       body: guests.isEmpty
           ? const Center(
