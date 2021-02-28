@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:restobillsplitter/shared/app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
@@ -16,14 +17,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
         return Future<bool>.value(true);
       },
       child: Scaffold(
-//      drawer: SideDrawer(),
-        appBar: AppBar(
-          title: const Text('Privacy Policy'),
-          elevation:
-              Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
-//          actions: <Widget>[
-//            LogoutButton(),
-//          ],
+        appBar: const CustomAppBar(
+          Text('Privacy Policy'),
         ),
         body: body,
       ),

@@ -2,6 +2,7 @@
 // https://www.youtube.com/watch?v=l5pjmhWpdmI&ab_channel=CodingWithChip
 // https://medium.com/@adp4infotech4/flutter-building-a-reorderable-listview-735013719cf3
 
+// https://stackoverflow.com/questions/39318370/google-sign-in-not-working-after-publishing-in-play-store
 // ./keytool -exportcert -list -v -alias key -keystore key.jks
 // https://apetools.webprofusion.com/#/tools/imagegorilla
 // https://redketchup.io/image-resizer
@@ -9,3 +10,7 @@
 // https://svgsilh.com/image/157901.html
 // https://www.ps2pdf.com/resize-png
 // #424242 #e0e0e0
+
+// https://pub.dev/packages/flutter_native_splash
+// flutter pub run flutter_native_splash:create
+// flutter pub run flutter_native_splash:remove

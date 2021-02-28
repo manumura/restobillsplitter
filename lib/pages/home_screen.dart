@@ -42,6 +42,7 @@ class _HomeScreenScreenState extends State<HomeScreen>
       length: 4,
       child: SafeArea(
         child: Scaffold(
+          // drawer: SideDrawer(),
           // appBar: AppBar(
           //   title: const Text('Title'),
           //   elevation:

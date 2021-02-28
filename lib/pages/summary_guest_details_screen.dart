@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
+import 'package:restobillsplitter/shared/app_bar.dart';
 
 class SummaryGuestDetailsScreen extends HookWidget {
   static const String routeName = '/summary_guest_detail';
@@ -16,12 +17,8 @@ class SummaryGuestDetailsScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: SideDrawer(),
-      appBar: AppBar(
-        title: Text(
-          guest.name,
-        ),
-        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
+      appBar: CustomAppBar(
+        Text(guest.name),
       ),
       body: guest.dishes == null || guest.dishes.isEmpty
           ? const Center(

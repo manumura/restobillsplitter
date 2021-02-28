@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:restobillsplitter/shared/app_bar.dart';
 
 class TermsAndConditionsScreen extends StatelessWidget {
   TermsAndConditionsScreen();
@@ -15,14 +16,8 @@ class TermsAndConditionsScreen extends StatelessWidget {
         return Future<bool>.value(true);
       },
       child: Scaffold(
-//      drawer: SideDrawer(),
-        appBar: AppBar(
-          title: const Text('Terms & Conditions'),
-          elevation:
-              Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
-//        actions: <Widget>[
-//          LogoutButton(),
-//        ],
+        appBar: const CustomAppBar(
+          Text('Terms & Conditions'),
         ),
         body: body,
       ),

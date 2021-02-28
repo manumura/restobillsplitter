@@ -14,10 +14,10 @@ analyzer:
     implicit-dynamic: false
 
   exclude:
-    - lib/**/*.gr.dart
-    - lib/**/*.iconfig.dart
-    - lib/**/*.g.dart
-    - lib/**/*.freezed.dart
+    - '**/*.gr.dart'
+    - '**/*.iconfig.dart'
+    - '**/*.g.dart'
+    - '/**/*.freezed.dart'
 
 linter:
   rules:

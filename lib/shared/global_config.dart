@@ -1,1 +1,1 @@
-const String applicationLegalese = '© 2020 Emmanuel Mura';
+const String applicationLegalese = '© 2021 Emmanuel Mura';

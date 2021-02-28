@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
+import 'package:restobillsplitter/shared/app_bar.dart';
 import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/assign_dish_list_tile.dart';
@@ -21,9 +22,8 @@ class AssignScreen extends HookWidget {
 
     return Scaffold(
       drawer: SideDrawer(),
-      appBar: AppBar(
-        title: const Text('Assign guests to dishes'),
-        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
+      appBar: const CustomAppBar(
+        Text('Assign guests to dishes'),
       ),
       body: dishes.isEmpty
           ? const Center(

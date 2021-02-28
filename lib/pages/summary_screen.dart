@@ -12,6 +12,7 @@ import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
+import 'package:restobillsplitter/shared/app_bar.dart';
 import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/summary_list_tile.dart';
@@ -40,10 +41,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
     return Scaffold(
       drawer: SideDrawer(),
-      appBar: AppBar(
-        title: _buildTitle(totalAsString, totalSplitAsString),
-        elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
-        actions: <Widget>[
+      appBar: CustomAppBar(
+        _buildTitle(totalAsString, totalSplitAsString),
+        <Widget>[
           _buildCsvExportButton(bill),
         ],
       ),
