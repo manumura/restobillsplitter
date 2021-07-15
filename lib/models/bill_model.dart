@@ -1,7 +1,6 @@
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 
-// TODO remove assigned guest
 class BillModel {
   BillModel({
     required this.guests,
