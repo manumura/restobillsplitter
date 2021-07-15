@@ -7,9 +7,9 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/shared/app_bar.dart';
 
 class SummaryGuestDetailsScreen extends HookWidget {
-  static const String routeName = '/summary_guest_detail';
-
   SummaryGuestDetailsScreen(this.guest);
+
+  static const String routeName = '/summary_guest_detail';
 
   final GuestModel guest;
   final Logger logger = getLogger();
@@ -20,7 +20,7 @@ class SummaryGuestDetailsScreen extends HookWidget {
       appBar: CustomAppBar(
         Text(guest.name),
       ),
-      body: guest.dishes == null || guest.dishes.isEmpty
+      body: guest.dishes.isEmpty
           ? const Center(
               child: Text('Please add a dish first'),
             )
@@ -28,20 +28,25 @@ class SummaryGuestDetailsScreen extends HookWidget {
               padding: const EdgeInsets.all(10.0),
               itemBuilder: (BuildContext context, int index) {
                 final DishModel dish = guest.dishes[index];
-                final double totalPerDish = dish.price / dish.guestUuids.length;
+                final double totalPerDish =
+                    dish.price / dish.guestUuids!.length;
                 final String totalPerDishAsString =
-                    totalPerDish?.toStringAsFixed(2) ?? '0.0';
+                    totalPerDish.toStringAsFixed(2);
+                final String numberOfGuestsPerDish =
+                    (dish.guestUuids != null && dish.guestUuids!.length > 1)
+                        ? '(${dish.guestUuids!.length} guests)'
+                        : '';
 
                 return ListTile(
                   title: Text(
-                    dish.name,
+                    '${dish.name} $numberOfGuestsPerDish',
                     style: const TextStyle(
                       fontSize: 20.0,
                       // fontWeight: FontWeight.bold,
                     ),
                   ),
                   subtitle: Text(
-                    '\$${dish.price ?? 0.0}',
+                    '\$${dish.price}',
                     style: const TextStyle(
                       fontSize: 16.0,
                     ),

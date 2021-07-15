@@ -18,8 +18,8 @@ class HomeScreen extends StatefulHookWidget {
 
 class _HomeScreenScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  int _currentIndex;
-  PageController _pageController;
+  late int _currentIndex;
+  PageController? _pageController;
 
   final Logger logger = getLogger();
 
@@ -32,7 +32,7 @@ class _HomeScreenScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController!.dispose();
     super.dispose();
   }
 
@@ -70,7 +70,7 @@ class _HomeScreenScreenState extends State<HomeScreen>
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: (int index) {
-              _pageController.animateToPage(
+              _pageController!.animateToPage(
                 index,
                 curve: Curves.easeInOut,
                 duration: const Duration(milliseconds: 100),

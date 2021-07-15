@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
+import 'package:restobillsplitter/shared/utils.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class DishListTile extends StatefulHookWidget {
-  DishListTile({@required this.key, @required this.dish})
-      : assert(key != null && dish != null);
+  DishListTile({required this.key, required this.dish});
 
   final Key key;
   final DishModel dish;
@@ -24,7 +24,7 @@ class DishListTile extends StatefulHookWidget {
 class _DishListTileState extends State<DishListTile> {
   final Logger logger = getLogger();
 
-  BillStateNotifier billStateNotifier;
+  late BillStateNotifier billStateNotifier;
 
   final TextEditingController _nameTextController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
@@ -38,16 +38,14 @@ class _DishListTileState extends State<DishListTile> {
   void initState() {
     super.initState();
 
-    billStateNotifier = context.read(billStateNotifierProvider);
+    billStateNotifier = context.read(billStateNotifierProvider.notifier);
 
     _nameTextController.addListener(_toggleNameClearVisible);
-    _nameTextController.text =
-        (widget.dish?.name == null) ? '' : widget.dish.name;
+    _nameTextController.text = widget.dish.name;
     _nameFocusNode.addListener(_editDishName);
 
     _priceTextController.addListener(_togglePriceClearVisible);
-    _priceTextController.text =
-        (widget.dish?.price == null) ? '' : widget.dish.price.toString();
+    _priceTextController.text = widget.dish.price.toString();
     _priceFocusNode.addListener(_editDishPrice);
   }
 
@@ -77,9 +75,7 @@ class _DishListTileState extends State<DishListTile> {
 
   void _editDishPrice() {
     if (!_priceFocusNode.hasFocus) {
-      final double price = double.tryParse(
-              _priceTextController.text.replaceFirst(RegExp(r','), '.')) ??
-          0.00;
+      final double price = parseDouble(_priceTextController.text);
       _saveDishPrice(price);
     }
   }
@@ -149,7 +145,7 @@ class _DishListTileState extends State<DishListTile> {
         fillColor: Colors.white,
       ),
       onEditingComplete: () {
-        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
       },
     );
   }
@@ -196,37 +192,39 @@ class _DishListTileState extends State<DishListTile> {
         fillColor: Colors.white,
       ),
       onEditingComplete: () {
-        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+      },
+      onTap: () {
+        final double price = parseDouble(_priceTextController.text);
+        if (price <= 0) {
+          _priceTextController.clear();
+        }
       },
     );
   }
 
   void _saveDishName(String name) {
-    if (name != null) {
-      final DishModel dish = DishModel(
-        uuid: widget.dish.uuid,
-        name: name,
-        price: widget.dish.price,
-        guestUuids: widget.dish.guestUuids,
-      );
-      billStateNotifier.editDish(
-        dish,
-      );
-    }
+    final DishModel dish = DishModel(
+      uuid: widget.dish.uuid,
+      name: name,
+      price: widget.dish.price,
+      guestUuids: widget.dish.guestUuids,
+    );
+    billStateNotifier.editDish(
+      dish,
+    );
   }
 
   void _saveDishPrice(double price) {
-    if (price != null) {
-      final DishModel dish = DishModel(
-        uuid: widget.dish.uuid,
-        name: widget.dish.name,
-        price: price,
-        guestUuids: widget.dish.guestUuids,
-      );
-      billStateNotifier.editDish(
-        dish,
-      );
-    }
+    final DishModel dish = DishModel(
+      uuid: widget.dish.uuid,
+      name: widget.dish.name,
+      price: price,
+      guestUuids: widget.dish.guestUuids,
+    );
+    billStateNotifier.editDish(
+      dish,
+    );
   }
 
   void _deleteDish() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
@@ -17,7 +17,7 @@ class AssignScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider.state);
+    final BillModel bill = useProvider(billStateNotifierProvider);
     final List<DishModel> dishes = bill.dishes;
 
     return Scaffold(

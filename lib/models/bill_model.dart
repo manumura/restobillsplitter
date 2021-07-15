@@ -1,17 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 
+// TODO remove assigned guest
 class BillModel {
   BillModel({
-    @required this.guests,
-    @required this.dishes,
-    @required this.tax,
-    @required this.isSplitTaxEqually,
-  }) : assert(guests != null &&
-            dishes != null &&
-            tax != null &&
-            isSplitTaxEqually != null);
+    required this.guests,
+    required this.dishes,
+    required this.tax,
+    required this.isSplitTaxEqually,
+  });
 
   List<GuestModel> guests;
   List<DishModel> dishes;
@@ -19,16 +16,8 @@ class BillModel {
   bool isSplitTaxEqually;
 
   double get total {
-    if (dishes == null) {
-      return 0.0;
-    }
-
     double total = 0.0;
     for (final DishModel dish in dishes) {
-      if (dish.price == null) {
-        continue;
-      }
-
       total += dish.price;
     }
 
@@ -37,35 +26,19 @@ class BillModel {
   }
 
   double get totalWithTax {
-    if (dishes == null) {
-      return 0.0;
-    }
-
     double total = 0.0;
     for (final DishModel dish in dishes) {
-      if (dish.price == null) {
-        continue;
-      }
-
       total += dish.price;
     }
 
-    final double totalWithTax = (tax == null) ? total : total * (1 + tax / 100);
+    final double totalWithTax = total * (1 + tax / 100);
     // Round to 2 decimals
     return double.parse(totalWithTax.toStringAsFixed(2));
   }
 
   double get totalToSplit {
-    if (guests == null) {
-      return 0.0;
-    }
-
     double total = 0.0;
     for (final GuestModel guest in guests) {
-      if (guest.total == null) {
-        continue;
-      }
-
       total += guest.total;
     }
 
@@ -74,18 +47,12 @@ class BillModel {
   }
 
   double get totalWithTaxToSplit {
-    if (guests == null) {
-      return 0.0;
-    }
-
     double totalWithTax = 0.0;
     for (final GuestModel guest in guests) {
-      final double guestTotal =
-          guest.getTotalWithTax(isSplitTaxEqually: isSplitTaxEqually, tax: tax);
-      if (total == null) {
-        continue;
-      }
-
+      final double guestTotal = guest.getTotalWithTax(
+          isSplitTaxEqually: isSplitTaxEqually,
+          taxAsPercentage: tax,
+          taxAsAmount: taxSplitEqually);
       totalWithTax += guestTotal;
     }
 
@@ -94,10 +61,6 @@ class BillModel {
   }
 
   double get taxSplitEqually {
-    if (guests == null || dishes == null || tax == null) {
-      return 0.0;
-    }
-
     final double taxSplitEqually = (total * tax / 100) / guests.length;
     // Round to 2 decimals
     return double.parse(taxSplitEqually.toStringAsFixed(2));

@@ -54,7 +54,7 @@ Last December 29, 2020
     return Markdown(
       data: markDown,
       styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-        h2: Theme.of(context).textTheme.headline6.copyWith(
+        h2: Theme.of(context).textTheme.headline6!.copyWith(
               color: Colors.black,
             ),
       ),

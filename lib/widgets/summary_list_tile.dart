@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
@@ -11,8 +11,7 @@ import 'package:restobillsplitter/pages/summary_guest_details_screen.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class SummaryListTile extends HookWidget {
-  SummaryListTile({@required this.key, @required this.guest})
-      : assert(key != null && guest != null);
+  SummaryListTile({required this.key, required this.guest});
 
   final Key key;
   final GuestModel guest;
@@ -21,18 +20,22 @@ class SummaryListTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider.state);
-    final String totalAsString = guest.total?.toStringAsFixed(2) ?? '0.0';
+    final BillModel bill = useProvider(billStateNotifierProvider);
+    final String totalAsString = guest.total.toStringAsFixed(2);
     final double totalWithTax = guest.getTotalWithTax(
       isSplitTaxEqually: bill.isSplitTaxEqually,
-      tax: bill.tax,
+      taxAsPercentage: bill.tax,
+      taxAsAmount: bill.taxSplitEqually,
     );
-    final String totalWithTaxAsString =
-        totalWithTax?.toStringAsFixed(2) ?? '0.0';
+    final String totalWithTaxAsString = totalWithTax.toStringAsFixed(2);
     String message = 'has to pay \$$totalWithTaxAsString';
-    if (bill.tax != null && bill.tax > 0) {
+    if (bill.tax > 0) {
       message += ' (\$$totalAsString without tax)';
     }
+
+    final Widget trailingWidget = (guest.dishes.isNotEmpty)
+        ? const Icon(FontAwesomeIcons.chevronRight)
+        : const SizedBox();
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -53,8 +56,10 @@ class SummaryListTile extends HookWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        trailing: const Icon(FontAwesomeIcons.chevronRight),
-        onTap: () => _showGuestDetails(context, guest),
+        trailing: trailingWidget,
+        onTap: (guest.dishes.isNotEmpty)
+            ? () => _showGuestDetails(context, guest)
+            : null,
         // trailing: _buildSelectGuestButton(context, dish),
       ),
     );

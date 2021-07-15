@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/shared/app_bar.dart';
 import 'package:restobillsplitter/shared/side_drawer.dart';
+import 'package:restobillsplitter/shared/utils.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class OthersScreen extends StatefulHookWidget {
@@ -21,7 +22,7 @@ class OthersScreen extends StatefulHookWidget {
 class _OtherScreenState extends State<OthersScreen> {
   final Logger logger = getLogger();
 
-  BillStateNotifier billStateNotifier;
+  late BillStateNotifier billStateNotifier;
 
   final TextEditingController _taxTextController = TextEditingController();
   final FocusNode _taxFocusNode = FocusNode();
@@ -32,11 +33,11 @@ class _OtherScreenState extends State<OthersScreen> {
   void initState() {
     super.initState();
 
-    billStateNotifier = context.read(billStateNotifierProvider);
-    final BillModel bill = context.read(billStateNotifierProvider.state);
+    billStateNotifier = context.read(billStateNotifierProvider.notifier);
+    final BillModel bill = context.read(billStateNotifierProvider);
 
     _taxTextController.addListener(_togglePriceClearVisible);
-    _taxTextController.text = (bill.tax == null) ? '' : bill.tax.toString();
+    _taxTextController.text = bill.tax.toString();
     _taxFocusNode.addListener(_editTax);
   }
 
@@ -54,7 +55,7 @@ class _OtherScreenState extends State<OthersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider.state);
+    final BillModel bill = useProvider(billStateNotifierProvider);
     final bool isSplitTaxEqually = bill.isSplitTaxEqually;
 
     return Scaffold(
@@ -122,7 +123,13 @@ class _OtherScreenState extends State<OthersScreen> {
         fillColor: Colors.white,
       ),
       onEditingComplete: () {
-        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+      },
+      onTap: () {
+        final double tax = parseDouble(_taxTextController.text);
+        if (tax <= 0) {
+          _taxTextController.clear();
+        }
       },
     );
   }
@@ -137,10 +144,7 @@ class _OtherScreenState extends State<OthersScreen> {
 
   void _editTax() {
     if (!_taxFocusNode.hasFocus) {
-      final double tax = double.tryParse(
-              _taxTextController.text.replaceFirst(RegExp(r','), '.')) ??
-          0;
-
+      final double tax = parseDouble(_taxTextController.text);
       final bool isValid = _validateTax(tax);
       if (isValid) {
         billStateNotifier.editTax(tax);
@@ -150,7 +154,7 @@ class _OtherScreenState extends State<OthersScreen> {
 
   bool _validateTax(double tax) {
     bool isValid = true;
-    if (tax == null || tax < 0 || tax > 100) {
+    if (tax < 0 || tax > 100) {
       isValid = false;
     }
     setState(() => _isTaxValid = isValid);

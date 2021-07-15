@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
@@ -12,8 +12,7 @@ import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/assign_guest_to_dish_dialog.dart';
 
 class AssignDishListTile extends HookWidget {
-  AssignDishListTile({@required this.key, @required this.dish})
-      : assert(key != null && dish != null);
+  AssignDishListTile({required this.key, required this.dish});
 
   final Key key;
   final DishModel dish;
@@ -22,7 +21,7 @@ class AssignDishListTile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider.state);
+    final BillModel bill = useProvider(billStateNotifierProvider);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -36,7 +35,7 @@ class AssignDishListTile extends HookWidget {
         onTap: () => _openAssignGuestToDishDialog(context, dish),
         child: ListTile(
           title: Text(
-            '${dish.name} ${dish.price != null ? '\$' : ''}${dish.price ?? ''}',
+            '${dish.name} \$${dish.price}',
             // style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           subtitle: Wrap(
@@ -52,14 +51,14 @@ class AssignDishListTile extends HookWidget {
 
   List<Widget> _buildGuestsTextList(BillModel bill) {
     final List<Widget> guestsTextList = <Widget>[];
-    final List<String> guestUuids = dish.guestUuids;
-    final List<GuestModel> guests = bill.guests == null || guestUuids == null
+    final List<String>? guestUuids = dish.guestUuids;
+    final List<GuestModel> guests = guestUuids == null
         ? <GuestModel>[]
         : bill.guests
             .where((GuestModel g) => guestUuids.contains(g.uuid))
             .toList();
 
-    if (guests != null && guests.isNotEmpty) {
+    if (guests.isNotEmpty) {
       guestsTextList.add(const SizedBox(
         height: 5.0,
       ));
@@ -75,7 +74,7 @@ class AssignDishListTile extends HookWidget {
                       color: guests[i].color, fontWeight: FontWeight.bold),
                 ),
               TextSpan(
-                text: dish.guestUuids.length > 1
+                text: dish.guestUuids!.length > 1
                     ? ' shared this dish'
                     : ' got this dish',
                 style: const TextStyle(
@@ -91,7 +90,7 @@ class AssignDishListTile extends HookWidget {
   }
 
   Widget _buildSelectGuestButton(BuildContext context, DishModel dish) {
-    final Color color = dish.guestUuids == null || dish.guestUuids.isEmpty
+    final Color color = dish.guestUuids == null || dish.guestUuids!.isEmpty
         ? Colors.black
         : Colors.black26;
     return IconButton(

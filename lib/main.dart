@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/pages/assign_screen.dart';
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
     TermsAndConditionsScreen.routeName: TermsAndConditionsScreen(),
   };
 
-  Future<void> _initializeFirebaseFuture;
+  Future<void>? _initializeFirebaseFuture;
 
   // Define an async function to initialize FlutterFire
   Future<void> _initializeFirebase() async {
@@ -80,11 +80,11 @@ class _MyAppState extends State<MyApp> {
     }
 
     // Pass all uncaught errors to Crashlytics.
-    final Function originalOnError = FlutterError.onError;
+    final Function? originalOnError = FlutterError.onError;
     FlutterError.onError = (FlutterErrorDetails errorDetails) async {
       await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
       // Forward to original handler.
-      originalOnError(errorDetails);
+      originalOnError!(errorDetails);
     };
   }
 
@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
       },
       child: MaterialApp(
         // debugShowCheckedModeBanner: false,
@@ -117,7 +117,6 @@ class _MyAppState extends State<MyApp> {
                     );
                   }
                   return HomeScreen();
-                  break;
                 default:
                   return Center(child: AdaptiveProgressIndicator());
               }
@@ -134,7 +133,7 @@ class _MyAppState extends State<MyApp> {
               return PageRouteBuilder<Widget>(
                 pageBuilder: (BuildContext context, Animation<double> animation,
                     Animation<double> secondaryAnimation) {
-                  return routes[settings.name];
+                  return routes[settings.name!]!;
                 },
                 transitionsBuilder: (BuildContext context,
                     Animation<double> animation,

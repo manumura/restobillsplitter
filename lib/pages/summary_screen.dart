@@ -4,7 +4,7 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
@@ -32,12 +32,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider.state);
+    final BillModel bill = useProvider(billStateNotifierProvider);
     final List<GuestModel> guests = bill.guests;
-    final String totalAsString =
-        bill.totalWithTax?.toStringAsFixed(2) ?? '0.00';
+    final String totalAsString = bill.totalWithTax.toStringAsFixed(2);
     final String totalSplitAsString =
-        bill.totalWithTaxToSplit?.toStringAsFixed(2) ?? '0.00';
+        bill.totalWithTaxToSplit.toStringAsFixed(2);
 
     return Scaffold(
       drawer: SideDrawer(),
@@ -96,11 +95,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
               FontAwesomeIcons.fileCsv,
               color: Colors.black,
             ),
-      onPressed: _isLoading ||
-              bill.guests == null ||
-              bill.guests.isEmpty ||
-              bill.dishes == null ||
-              bill.dishes.isEmpty
+      onPressed: _isLoading || bill.guests.isEmpty || bill.dishes.isEmpty
           ? null
           : () => _exportToCsv(context, bill),
     );
@@ -108,7 +103,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   Future<void> _exportToCsv(BuildContext context, BillModel bill) async {
     setState(() => _isLoading = true);
-    final List<List<dynamic>> rows = <List<dynamic>>[];
+    final List<List<dynamic>?> rows = <List<dynamic>?>[];
 
     // Guests
     final List<dynamic> guestsHeader = <dynamic>[];
@@ -116,7 +111,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       'Guest name',
       'Total',
     ]);
-    if (bill.tax != null && bill.tax > 0) {
+    if (bill.tax > 0) {
       guestsHeader.add('Total with tax (${bill.tax}%)');
     }
     rows.add(guestsHeader);
@@ -127,10 +122,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
       final GuestModel guest = bill.guests[i];
       row.add(guest.name);
       row.add(guest.total);
-      if (bill.tax != null && bill.tax > 0) {
+      if (bill.tax > 0) {
         row.add(guest.getTotalWithTax(
           isSplitTaxEqually: bill.isSplitTaxEqually,
-          tax: bill.tax,
+          taxAsPercentage: bill.tax,
+          taxAsAmount: bill.taxSplitEqually,
         ));
       }
 
@@ -140,7 +136,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     // Guests total
     final List<dynamic> guestsTotal = <dynamic>[];
     guestsTotal.addAll(<dynamic>['', bill.totalToSplit]);
-    if (bill.tax != null && bill.tax > 0) {
+    if (bill.tax > 0) {
       guestsTotal.add(bill.totalWithTaxToSplit);
     }
     rows.add(guestsTotal);
@@ -154,7 +150,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       'Dish name',
       'Price',
     ]);
-    if (bill.tax != null && bill.tax > 0) {
+    if (bill.tax > 0) {
       dishesHeader.add('Price with tax (${bill.tax}%)');
     }
     rows.add(dishesHeader);
@@ -165,7 +161,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       final DishModel dish = bill.dishes[i];
       row.add(dish.name);
       row.add(dish.price);
-      if (bill.tax != null && bill.tax > 0) {
+      if (bill.tax > 0) {
         row.add(dish.getPriceWithTax(taxAsPercentage: bill.tax));
       }
 
@@ -175,7 +171,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     // Dishes total
     final List<dynamic> dishesTotal = <dynamic>[];
     dishesTotal.addAll(<dynamic>['', bill.total]);
-    if (bill.tax != null && bill.tax > 0) {
+    if (bill.tax > 0) {
       dishesTotal.add(bill.totalWithTax);
     }
     rows.add(dishesTotal);
@@ -183,13 +179,24 @@ class _SummaryScreenState extends State<SummaryScreen> {
     final DateTime now = DateTime.now();
     final String dateTitle = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     final String fileSuffix = DateFormat('yyyyMMddHHmmss').format(now);
-    final Directory directory = await getExternalStorageDirectory();
+
+    final Directory? directory = await getExternalStorageDirectory();
+    if (directory == null) {
+      logger.d('Cannot find external storage directory');
+      return;
+    }
+
     final File file = File('${directory.path}/bill_summary_$fileSuffix.csv');
     // final File file = MemoryFileSystem().file('tmp.csv');
     final String csv = const ListToCsvConverter().convert(rows);
     file.writeAsString(csv);
 
-    final RenderBox box = context.findRenderObject() as RenderBox;
+    final RenderBox? box = context.findRenderObject() as RenderBox?;
+    if (box == null) {
+      logger.d('Cannot find render box');
+      return;
+    }
+
     Share.shareFiles(
       <String>[file.path],
       subject: 'Your Resto Bill Splitter bill summary on $dateTitle',

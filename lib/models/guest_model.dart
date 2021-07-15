@@ -1,14 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
 
 class GuestModel {
   GuestModel({
-    @required this.uuid,
-    @required this.name,
-    @required this.color,
-    @required this.dishes,
-  }) : assert(uuid != null && name != null && color != null && dishes != null);
+    required this.uuid,
+    required this.name,
+    required this.color,
+    required this.dishes,
+  });
 
   String uuid;
   String name;
@@ -18,35 +17,33 @@ class GuestModel {
   double get total {
     double total = 0.0;
     for (final DishModel dish in dishes) {
-      final double totalForDish = dish != null && dish.price != null
-          ? dish.price / dish.guestUuids.length
-          : 0;
+      if (dish.guestUuids == null || dish.guestUuids!.isEmpty) {
+        continue;
+      }
+      final double totalForDish = dish.price / dish.guestUuids!.length;
       total += totalForDish;
     }
     return total;
   }
 
   double getTotalWithTax(
-      {@required bool isSplitTaxEqually, @required double tax}) {
+      {required bool isSplitTaxEqually,
+      required double taxAsPercentage,
+      required double taxAsAmount}) {
     final double guestTotalWithTax = isSplitTaxEqually
-        ? _calculateTotalWithTaxSplitEqually(total, tax)
-        : _calculateTotalWithTax(total, tax);
+        ? _calculateTotalWithTaxSplitEqually(taxAsAmount)
+        : _calculateTotalWithTax(taxAsPercentage);
     return guestTotalWithTax;
   }
 
-  double _calculateTotalWithTax(double total, double taxAsPercentage) {
-    if (taxAsPercentage == null ||
-        taxAsPercentage < 0 ||
-        taxAsPercentage > 100) {
+  double _calculateTotalWithTax(double taxAsPercentage) {
+    if (taxAsPercentage < 0 || taxAsPercentage > 100) {
       return total;
     }
     return total * (1 + taxAsPercentage / 100);
   }
 
-  double _calculateTotalWithTaxSplitEqually(double total, double taxAsAmount) {
-    if (taxAsAmount == null) {
-      return total;
-    }
+  double _calculateTotalWithTaxSplitEqually(double taxAsAmount) {
     return total + taxAsAmount;
   }
 
@@ -62,6 +59,7 @@ class GuestModel {
 
   @override
   String toString() {
-    return 'GuestModel{uuid: $uuid, name: $name, color: $color, total: $total, dishes: $dishes}';
+    return 'GuestModel{name: $name, total: ${total.roundToDouble()}, dishes: '
+        '${dishes.length}';
   }
 }

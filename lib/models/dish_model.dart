@@ -1,22 +1,18 @@
-import 'package:flutter/cupertino.dart';
-
 class DishModel {
   DishModel({
-    @required this.uuid,
-    @required this.name,
-    this.price,
+    required this.uuid,
+    required this.name,
+    required this.price,
     this.guestUuids,
-  }) : assert(uuid != null && name != null);
+  });
 
   String uuid;
   String name;
   double price;
-  List<String> guestUuids = <String>[];
+  List<String>? guestUuids = <String>[];
 
-  double getPriceWithTax({@required double taxAsPercentage}) {
-    if (taxAsPercentage == null ||
-        taxAsPercentage < 0 ||
-        taxAsPercentage > 100) {
+  double? getPriceWithTax({required double taxAsPercentage}) {
+    if (taxAsPercentage < 0 || taxAsPercentage > 100) {
       return price;
     }
     return price * (1 + taxAsPercentage / 100);
@@ -34,6 +30,8 @@ class DishModel {
 
   @override
   String toString() {
-    return 'DishModel{uuid: $uuid, name: $name, price: $price, guestUuids: $guestUuids}';
+    final int numberOfGuests =
+        (guestUuids != null && guestUuids!.isNotEmpty) ? guestUuids!.length : 0;
+    return 'DishModel{name: $name, price: $price, guests: $numberOfGuests}';
   }
 }

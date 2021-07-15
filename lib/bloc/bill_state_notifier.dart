@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
@@ -9,7 +9,7 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:uuid/uuid.dart';
 
 class BillStateNotifier extends StateNotifier<BillModel> {
-  BillStateNotifier([BillModel initialBill])
+  BillStateNotifier([BillModel? initialBill])
       : super(
           initialBill ??
               BillModel(
@@ -28,7 +28,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
   void addGuest() {
     final int nextIndex = _nextGuestIndex;
     _nextGuestIndex++;
-    final Uuid uuid = Uuid();
+    const Uuid uuid = Uuid();
     final Color color = Colors.primaries[nextIndex % Colors.primaries.length];
     final GuestModel guestToAdd = GuestModel(
       uuid: uuid.v4(),
@@ -64,18 +64,16 @@ class BillStateNotifier extends StateNotifier<BillModel> {
   void removeGuest(GuestModel guest) {
     // Remove guest from assigned dishes
     final List<DishModel> newDishes = <DishModel>[];
-    if (state.dishes != null) {
-      for (final DishModel d in state.dishes) {
-        if (d.guestUuids == null) {
-          continue;
-        }
-
-        final List<String> guestUuids =
-            d.guestUuids.where((String uuid) => uuid != guest.uuid).toList();
-        final DishModel newDish = DishModel(
-            uuid: d.uuid, name: d.name, price: d.price, guestUuids: guestUuids);
-        newDishes.add(newDish);
+    for (final DishModel d in state.dishes) {
+      if (d.guestUuids == null) {
+        continue;
       }
+
+      final List<String> guestUuids =
+          d.guestUuids!.where((String uuid) => uuid != guest.uuid).toList();
+      final DishModel newDish = DishModel(
+          uuid: d.uuid, name: d.name, price: d.price, guestUuids: guestUuids);
+      newDishes.add(newDish);
     }
 
     final List<GuestModel> newGuests =
@@ -91,7 +89,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         }
 
         final List<String> guestUuids =
-            d.guestUuids.where((String uuid) => uuid != guest.uuid).toList();
+            d.guestUuids!.where((String uuid) => uuid != guest.uuid).toList();
         final DishModel newGuestDish = DishModel(
             uuid: d.uuid, name: d.name, price: d.price, guestUuids: guestUuids);
         newGuestDishes.add(newGuestDish);
@@ -115,11 +113,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
   }
 
   void addDish() {
-    final Uuid uuid = Uuid();
+    const Uuid uuid = Uuid();
     final int nextIndex = _nextDishIndex;
     _nextDishIndex++;
     final DishModel dishToAdd =
-        DishModel(uuid: uuid.v4(), name: 'Dish$nextIndex');
+        DishModel(uuid: uuid.v4(), name: 'Dish$nextIndex', price: 0.0);
     state = state..dishes.add(dishToAdd);
   }
 
@@ -139,7 +137,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
 
     final List<GuestModel> newGuests = <GuestModel>[];
     for (final GuestModel guest in state.guests) {
-      if (guest.dishes != null && guest.dishes.contains(dish)) {
+      if (guest.dishes.contains(dish)) {
         final List<DishModel> guestDishes = <DishModel>[
           for (final DishModel d in guest.dishes)
             if (d.uuid == dish.uuid)
@@ -205,50 +203,44 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     );
   }
 
-  void assignGuestsToDish(DishModel dish, List<GuestModel> assignedGuests) {
+  void assignGuestsToDish(DishModel dish, List<GuestModel?> assignedGuests) {
     final DishModel newDish = DishModel(
       uuid: dish.uuid,
       name: dish.name,
       price: dish.price,
-      guestUuids: assignedGuests.map((GuestModel g) => g.uuid).toList(),
+      guestUuids: assignedGuests.map((GuestModel? g) => g!.uuid).toList(),
     );
     final List<DishModel> newDishes = <DishModel>[
       for (final DishModel d in state.dishes)
-        if (d.uuid == dish.uuid) newDish else d,
+        if (d.uuid == newDish.uuid) newDish else d,
     ];
 
     final List<GuestModel> newGuests = <GuestModel>[];
     for (final GuestModel currentGuest in state.guests) {
       // Dish already assigned to guest
-      if (currentGuest.dishes != null && currentGuest.dishes.contains(dish)) {
-        final List<DishModel> dishes = currentGuest.dishes;
-        if (assignedGuests == null || !assignedGuests.contains(currentGuest)) {
+      final List<DishModel> guestDishes = <DishModel>[
+        for (final DishModel d in currentGuest.dishes)
+          if (d.uuid == newDish.uuid) newDish else d,
+      ];
+      if (currentGuest.dishes.contains(dish)) {
+        if (!assignedGuests.contains(currentGuest)) {
           // Unassign guest
-          dishes.remove(dish);
+          guestDishes.remove(dish);
         }
-
-        final GuestModel newGuest = GuestModel(
-          uuid: currentGuest.uuid,
-          name: currentGuest.name,
-          color: currentGuest.color,
-          dishes: dishes,
-        );
-        newGuests.add(newGuest);
       } else {
-        final List<DishModel> dishes = currentGuest.dishes;
-        if (assignedGuests != null && assignedGuests.contains(currentGuest)) {
+        if (assignedGuests.contains(currentGuest)) {
           // Assign guest
-          dishes.add(newDish);
+          guestDishes.add(newDish);
         }
-
-        final GuestModel newGuest = GuestModel(
-          uuid: currentGuest.uuid,
-          name: currentGuest.name,
-          color: currentGuest.color,
-          dishes: dishes,
-        );
-        newGuests.add(newGuest);
       }
+
+      final GuestModel newGuest = GuestModel(
+        uuid: currentGuest.uuid,
+        name: currentGuest.name,
+        color: currentGuest.color,
+        dishes: guestDishes,
+      );
+      newGuests.add(newGuest);
     }
 
     state = BillModel(
@@ -267,7 +259,7 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         isSplitTaxEqually: state.isSplitTaxEqually);
   }
 
-  void editSplitTaxEqually({bool isSplitTaxEqually}) {
+  void editSplitTaxEqually({required bool isSplitTaxEqually}) {
     state = BillModel(
         guests: state.guests,
         dishes: state.dishes,

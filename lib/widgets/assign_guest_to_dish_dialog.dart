@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
@@ -8,7 +8,7 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class AssignGuestToDishDialog extends StatefulHookWidget {
-  AssignGuestToDishDialog({@required this.dish}) : assert(dish != null);
+  AssignGuestToDishDialog({required this.dish});
 
   final DishModel dish;
 
@@ -17,25 +17,25 @@ class AssignGuestToDishDialog extends StatefulHookWidget {
 }
 
 class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
-  final Map<GuestModel, bool> _selectedMap = <GuestModel, bool>{};
-  bool _isSelectEveryoneChecked = true;
-  BillStateNotifier billStateNotifier;
-  BillModel bill;
-  List<GuestModel> guests;
+  final Map<GuestModel?, bool?> _selectedMap = <GuestModel?, bool?>{};
+  bool? _isSelectEveryoneChecked = true;
+  late BillStateNotifier billStateNotifier;
+  late BillModel bill;
+  List<GuestModel>? guests;
 
   @override
   void initState() {
     super.initState();
 
-    billStateNotifier = context.read(billStateNotifierProvider);
-    bill = context.read(billStateNotifierProvider.state);
+    billStateNotifier = context.read(billStateNotifierProvider.notifier);
+    bill = context.read(billStateNotifierProvider);
     guests = bill.guests;
 
-    for (final GuestModel guest in guests) {
+    for (final GuestModel guest in guests!) {
       final bool isGuestSelected = widget.dish.guestUuids != null &&
-          widget.dish.guestUuids.contains(guest.uuid);
+          widget.dish.guestUuids!.contains(guest.uuid);
       _selectedMap[guest] = isGuestSelected;
-      _isSelectEveryoneChecked = _isSelectEveryoneChecked && isGuestSelected;
+      _isSelectEveryoneChecked = _isSelectEveryoneChecked! && isGuestSelected;
     }
   }
 
@@ -76,7 +76,7 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
           child: const Text('OK'),
         ),
       ],
-      content: guests.isEmpty
+      content: guests!.isEmpty
           ? const Center(
               child: Text('Please add a guest first'),
             )
@@ -91,14 +91,14 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
                 //   return _buildGuestListTile(context, guest);
                 // },
                 itemCount:
-                    guests == null || guests.isEmpty ? 1 : guests.length + 1,
+                    guests == null || guests!.isEmpty ? 1 : guests!.length + 1,
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
                     return _buildAllListTile(context);
                   }
 
                   index -= 1;
-                  final GuestModel guest = guests[index];
+                  final GuestModel guest = guests![index];
                   return _buildGuestListTile(context, guest);
                 },
                 separatorBuilder: (BuildContext context, int index) =>
@@ -118,9 +118,9 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
       activeColor: Colors.blue[800],
       // checkColor: Colors.red[100],
       controlAffinity: ListTileControlAffinity.leading,
-      selected: _selectedMap[guest],
+      selected: _selectedMap[guest]!,
       value: _selectedMap[guest],
-      onChanged: (bool selected) =>
+      onChanged: (bool? selected) =>
           _selectGuest(guest: guest, selected: selected),
     );
   }
@@ -135,20 +135,20 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
       activeColor: Colors.blue[800],
       // checkColor: Colors.red[100],
       controlAffinity: ListTileControlAffinity.leading,
-      selected: _isSelectEveryoneChecked,
+      selected: _isSelectEveryoneChecked!,
       value: _isSelectEveryoneChecked,
-      onChanged: (bool selected) => _selectAll(selected: selected),
+      onChanged: (bool? selected) => _selectAll(selected: selected),
     );
   }
 
-  void _selectGuest({GuestModel guest, bool selected}) {
+  void _selectGuest({GuestModel? guest, bool? selected}) {
     setState(() => _selectedMap[guest] = selected);
   }
 
-  void _selectAll({bool selected}) {
+  void _selectAll({bool? selected}) {
     setState(() {
       _isSelectEveryoneChecked = selected;
-      for (final MapEntry<GuestModel, bool> selectedMapEntry
+      for (final MapEntry<GuestModel?, bool?> selectedMapEntry
           in _selectedMap.entries) {
         _selectedMap[selectedMapEntry.key] = selected;
       }
@@ -156,10 +156,10 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
   }
 
   void _assignGuestsToDish() {
-    final List<GuestModel> guests = <GuestModel>[];
+    final List<GuestModel?> guests = <GuestModel?>[];
 
-    _selectedMap.forEach((GuestModel guest, bool selected) {
-      if (selected) {
+    _selectedMap.forEach((GuestModel? guest, bool? selected) {
+      if (selected!) {
         guests.add(guest);
       }
     });

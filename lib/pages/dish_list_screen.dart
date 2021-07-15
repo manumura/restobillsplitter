@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
 import 'package:restobillsplitter/models/dish_model.dart';
@@ -18,16 +18,16 @@ class DishListScreen extends StatefulHookWidget {
 }
 
 class _DishListScreenState extends State<DishListScreen> {
-  ScrollController _scrollController;
+  ScrollController? _scrollController;
   bool _isFabVisible = true;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _scrollController.addListener(() {
+    _scrollController!.addListener(() {
       final bool isFabVisible =
-          _scrollController.position.userScrollDirection ==
+          _scrollController!.position.userScrollDirection ==
               ScrollDirection.forward;
       if (_isFabVisible != isFabVisible) {
         setState(() => _isFabVisible = isFabVisible);
@@ -37,13 +37,13 @@ class _DishListScreenState extends State<DishListScreen> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider.state);
+    final BillModel bill = useProvider(billStateNotifierProvider);
     final List<DishModel> dishes = bill.dishes;
 
     return Scaffold(
@@ -83,7 +83,7 @@ class _DishListScreenState extends State<DishListScreen> {
 
   void _addDish(BuildContext context) {
     final BillStateNotifier billStateNotifier =
-        context.read(billStateNotifierProvider);
+        context.read(billStateNotifierProvider.notifier);
     billStateNotifier.addDish();
   }
 }

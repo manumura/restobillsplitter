@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
@@ -11,8 +11,7 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class GuestListTile extends StatefulHookWidget {
-  GuestListTile({@required this.key, @required this.guest})
-      : assert(key != null && guest != null);
+  GuestListTile({required this.key, required this.guest});
 
   final Key key;
   final GuestModel guest;
@@ -24,7 +23,7 @@ class GuestListTile extends StatefulHookWidget {
 class _GuestListTileState extends State<GuestListTile> {
   final Logger logger = getLogger();
 
-  BillStateNotifier billStateNotifier;
+  late BillStateNotifier billStateNotifier;
 
   final TextEditingController _nameTextController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
@@ -34,10 +33,10 @@ class _GuestListTileState extends State<GuestListTile> {
   void initState() {
     super.initState();
 
-    billStateNotifier = context.read(billStateNotifierProvider);
+    billStateNotifier = context.read(billStateNotifierProvider.notifier);
 
     _nameTextController.addListener(_toggleNameClearVisible);
-    _nameTextController.text = (widget.guest == null) ? '' : widget.guest.name;
+    _nameTextController.text = widget.guest.name;
 
     _nameFocusNode.addListener(_editGuestName);
   }
@@ -79,7 +78,7 @@ class _GuestListTileState extends State<GuestListTile> {
             flex: 3,
             child: Icon(
               FontAwesomeIcons.userAlt,
-              color: widget.guest.color ?? Colors.black,
+              color: widget.guest.color,
             ),
             // child: CircleAvatar(
             //   backgroundColor: widget.guest.color ?? Colors.black,
@@ -136,22 +135,20 @@ class _GuestListTileState extends State<GuestListTile> {
         // floatingLabelBehavior: FloatingLabelBehavior.never,
       ),
       onEditingComplete: () {
-        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
       },
     );
   }
 
   void _saveGuestName(String name) {
-    if (name != null) {
-      billStateNotifier.editGuest(
-        GuestModel(
-          uuid: widget.guest.uuid,
-          name: name,
-          color: widget.guest.color,
-          dishes: widget.guest.dishes,
-        ),
-      );
-    }
+    billStateNotifier.editGuest(
+      GuestModel(
+        uuid: widget.guest.uuid,
+        name: name,
+        color: widget.guest.color,
+        dishes: widget.guest.dishes,
+      ),
+    );
   }
 
   void _deleteGuest() {
