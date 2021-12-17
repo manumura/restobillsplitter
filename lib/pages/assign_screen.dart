@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
@@ -10,14 +9,14 @@ import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/assign_dish_list_tile.dart';
 
-class AssignScreen extends HookWidget {
+class AssignScreen extends HookConsumerWidget {
   static const String routeName = '/assign';
 
   final Logger logger = getLogger();
 
   @override
-  Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final BillModel bill = ref.watch(billStateNotifierProvider);
     final List<DishModel> dishes = bill.dishes;
 
     return Scaffold(
@@ -34,7 +33,9 @@ class AssignScreen extends HookWidget {
               itemBuilder: (BuildContext context, int index) {
                 final DishModel dish = dishes[index];
                 return AssignDishListTile(
-                    key: ValueKey<String>(dish.uuid), dish: dish);
+                  key: ValueKey<String>(dish.uuid),
+                  dish: dish,
+                );
               },
               itemCount: dishes.length,
               separatorBuilder: (BuildContext context, int index) =>

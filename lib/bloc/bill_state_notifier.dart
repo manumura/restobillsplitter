@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:restobillsplitter/helpers/logger.dart';
@@ -72,7 +71,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
       final List<String> guestUuids =
           d.guestUuids!.where((String uuid) => uuid != guest.uuid).toList();
       final DishModel newDish = DishModel(
-          uuid: d.uuid, name: d.name, price: d.price, guestUuids: guestUuids);
+        uuid: d.uuid,
+        name: d.name,
+        price: d.price,
+        guestUuids: guestUuids,
+      );
       newDishes.add(newDish);
     }
 
@@ -91,7 +94,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
         final List<String> guestUuids =
             d.guestUuids!.where((String uuid) => uuid != guest.uuid).toList();
         final DishModel newGuestDish = DishModel(
-            uuid: d.uuid, name: d.name, price: d.price, guestUuids: guestUuids);
+          uuid: d.uuid,
+          name: d.name,
+          price: d.price,
+          guestUuids: guestUuids,
+        );
         newGuestDishes.add(newGuestDish);
       }
 
@@ -253,18 +260,20 @@ class BillStateNotifier extends StateNotifier<BillModel> {
 
   void editTax(double tax) {
     state = BillModel(
-        guests: state.guests,
-        dishes: state.dishes,
-        tax: tax,
-        isSplitTaxEqually: state.isSplitTaxEqually);
+      guests: state.guests,
+      dishes: state.dishes,
+      tax: tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
   }
 
   void editSplitTaxEqually({required bool isSplitTaxEqually}) {
     state = BillModel(
-        guests: state.guests,
-        dishes: state.dishes,
-        tax: state.tax,
-        isSplitTaxEqually: isSplitTaxEqually);
+      guests: state.guests,
+      dishes: state.dishes,
+      tax: state.tax,
+      isSplitTaxEqually: isSplitTaxEqually,
+    );
   }
 
   @override

@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,7 +10,7 @@ import 'package:restobillsplitter/helpers/logger.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
-class GuestListTile extends StatefulHookWidget {
+class GuestListTile extends ConsumerStatefulWidget {
   GuestListTile({required this.key, required this.guest});
 
   final Key key;
@@ -20,7 +20,7 @@ class GuestListTile extends StatefulHookWidget {
   _GuestListTileState createState() => _GuestListTileState();
 }
 
-class _GuestListTileState extends State<GuestListTile> {
+class _GuestListTileState extends ConsumerState<GuestListTile> {
   final Logger logger = getLogger();
 
   late BillStateNotifier billStateNotifier;
@@ -33,7 +33,7 @@ class _GuestListTileState extends State<GuestListTile> {
   void initState() {
     super.initState();
 
-    billStateNotifier = context.read(billStateNotifierProvider.notifier);
+    billStateNotifier = ref.read(billStateNotifierProvider.notifier);
 
     _nameTextController.addListener(_toggleNameClearVisible);
     _nameTextController.text = widget.guest.name;
@@ -62,16 +62,19 @@ class _GuestListTileState extends State<GuestListTile> {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      actionPane: const SlidableDrawerActionPane(),
-      actionExtentRatio: 0.3,
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: _deleteGuest,
-        ),
-      ],
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.3,
+        children: <Widget>[
+          SlidableAction(
+            onPressed: (BuildContext context) => _deleteGuest(),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
       child: Row(
         children: <Widget>[
           Flexible(
@@ -84,9 +87,7 @@ class _GuestListTileState extends State<GuestListTile> {
             //   backgroundColor: widget.guest.color ?? Colors.black,
             // ),
           ),
-          const Spacer(
-            flex: 1,
-          ),
+          const Spacer(),
           Expanded(
             flex: 33,
             child: _buildNameTextField(widget.guest),
@@ -125,6 +126,10 @@ class _GuestListTileState extends State<GuestListTile> {
                 ),
               ),
         labelText: 'Name',
+        labelStyle: const TextStyle(
+          fontStyle: FontStyle.italic,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         contentPadding: const EdgeInsets.all(8.0),
         border: const OutlineInputBorder(),
         // enabledBorder: OutlineInputBorder(

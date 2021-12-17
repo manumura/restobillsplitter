@@ -26,10 +26,11 @@ class GuestModel {
     return total;
   }
 
-  double getTotalWithTax(
-      {required bool isSplitTaxEqually,
-      required double taxAsPercentage,
-      required double taxAsAmount}) {
+  double getTotalWithTax({
+    required bool isSplitTaxEqually,
+    required double taxAsPercentage,
+    required double taxAsAmount,
+  }) {
     final double guestTotalWithTax = isSplitTaxEqually
         ? _calculateTotalWithTaxSplitEqually(taxAsAmount)
         : _calculateTotalWithTax(taxAsPercentage);

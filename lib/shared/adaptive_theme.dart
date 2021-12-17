@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 final ThemeData _androidTheme = ThemeData(
   brightness: Brightness.light,
   primarySwatch: Colors.amber,
-  accentColor: Colors.grey,
-  buttonColor: Colors.grey,
+  colorScheme: ColorScheme.fromSwatch(
+    primarySwatch: Colors.amber,
+    accentColor: Colors.grey,
+  ).copyWith(secondary: Colors.grey),
   fontFamily: 'Raleway',
   inputDecorationTheme: InputDecorationTheme(
     errorStyle: const TextStyle(
@@ -26,8 +28,10 @@ final ThemeData _androidTheme = ThemeData(
 final ThemeData _iOSTheme = ThemeData(
   brightness: Brightness.light,
   primarySwatch: Colors.grey,
-  accentColor: Colors.blue,
-  buttonColor: Colors.blue,
+  colorScheme: ColorScheme.fromSwatch(
+    primarySwatch: Colors.grey,
+    accentColor: Colors.blue,
+  ).copyWith(secondary: Colors.blue),
   fontFamily: 'Raleway',
   inputDecorationTheme: InputDecorationTheme(
     errorStyle: const TextStyle(

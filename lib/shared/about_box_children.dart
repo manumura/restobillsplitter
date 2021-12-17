@@ -52,7 +52,12 @@ List<Widget> buildAboutBoxChildren(BuildContext context) {
     const SizedBox(
       height: 20,
     ),
-    FlatButton(
+    TextButton(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) => Theme.of(context).primaryColor,
+        ),
+      ),
       onPressed: () {
         Navigator.of(context).pushNamed(
           PrivacyPolicyScreen.routeName,
@@ -60,7 +65,12 @@ List<Widget> buildAboutBoxChildren(BuildContext context) {
       },
       child: const Text('Privacy Policy'),
     ),
-    FlatButton(
+    TextButton(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) => Theme.of(context).primaryColor,
+        ),
+      ),
       onPressed: () {
         Navigator.of(context).pushNamed(
           TermsAndConditionsScreen.routeName,

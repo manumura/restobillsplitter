@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
@@ -10,14 +9,14 @@ import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/guest_list_tile.dart';
 
-class GuestListScreen extends StatefulHookWidget {
+class GuestListScreen extends ConsumerStatefulWidget {
   static const String routeName = '/guest_list';
 
   @override
   _GuestListScreenState createState() => _GuestListScreenState();
 }
 
-class _GuestListScreenState extends State<GuestListScreen> {
+class _GuestListScreenState extends ConsumerState<GuestListScreen> {
   ScrollController? _scrollController;
   bool _isFabVisible = true;
 
@@ -43,7 +42,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider);
+    final BillModel bill = ref.watch(billStateNotifierProvider);
     final List<GuestModel> guests = bill.guests;
 
     return Scaffold(
@@ -61,7 +60,9 @@ class _GuestListScreenState extends State<GuestListScreen> {
               itemBuilder: (BuildContext context, int index) {
                 final GuestModel guest = guests[index];
                 return GuestListTile(
-                    key: ValueKey<String>(guest.uuid), guest: guest);
+                  key: ValueKey<String>(guest.uuid),
+                  guest: guest,
+                );
               },
               itemCount: guests.length,
               separatorBuilder: (BuildContext context, int index) =>
@@ -83,7 +84,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
 
   void _addGuest(BuildContext context) {
     final BillStateNotifier billStateNotifier =
-        context.read(billStateNotifierProvider.notifier);
+        ref.read(billStateNotifierProvider.notifier);
     billStateNotifier.addGuest();
   }
 }

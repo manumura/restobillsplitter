@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -18,21 +17,21 @@ import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/summary_list_tile.dart';
 import 'package:share/share.dart';
 
-class SummaryScreen extends StatefulHookWidget {
+class SummaryScreen extends ConsumerStatefulWidget {
   static const String routeName = '/summary';
 
   @override
   _SummaryScreenState createState() => _SummaryScreenState();
 }
 
-class _SummaryScreenState extends State<SummaryScreen> {
+class _SummaryScreenState extends ConsumerState<SummaryScreen> {
   final Logger logger = getLogger();
 
   bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider);
+    final BillModel bill = ref.watch(billStateNotifierProvider);
     final List<GuestModel> guests = bill.guests;
     final String totalAsString = bill.totalWithTax.toStringAsFixed(2);
     final String totalSplitAsString =
@@ -57,7 +56,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
               itemBuilder: (BuildContext context, int index) {
                 final GuestModel guest = guests[index];
                 return SummaryListTile(
-                    key: ValueKey<String>(guest.uuid), guest: guest);
+                  key: ValueKey<String>(guest.uuid),
+                  guest: guest,
+                );
               },
               itemCount: guests.length,
               separatorBuilder: (BuildContext context, int index) =>
@@ -123,11 +124,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
       row.add(guest.name);
       row.add(guest.total);
       if (bill.tax > 0) {
-        row.add(guest.getTotalWithTax(
-          isSplitTaxEqually: bill.isSplitTaxEqually,
-          taxAsPercentage: bill.tax,
-          taxAsAmount: bill.taxSplitEqually,
-        ));
+        row.add(
+          guest.getTotalWithTax(
+            isSplitTaxEqually: bill.isSplitTaxEqually,
+            taxAsPercentage: bill.tax,
+            taxAsAmount: bill.taxSplitEqually,
+          ),
+        );
       }
 
       rows.add(row);

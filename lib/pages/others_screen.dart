@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -12,14 +11,14 @@ import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/shared/utils.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
-class OthersScreen extends StatefulHookWidget {
+class OthersScreen extends ConsumerStatefulWidget {
   static const String routeName = '/others';
 
   @override
-  State<StatefulWidget> createState() => _OtherScreenState();
+  _OtherScreenState createState() => _OtherScreenState();
 }
 
-class _OtherScreenState extends State<OthersScreen> {
+class _OtherScreenState extends ConsumerState<OthersScreen> {
   final Logger logger = getLogger();
 
   late BillStateNotifier billStateNotifier;
@@ -33,8 +32,8 @@ class _OtherScreenState extends State<OthersScreen> {
   void initState() {
     super.initState();
 
-    billStateNotifier = context.read(billStateNotifierProvider.notifier);
-    final BillModel bill = context.read(billStateNotifierProvider);
+    billStateNotifier = ref.read(billStateNotifierProvider.notifier);
+    final BillModel bill = ref.read(billStateNotifierProvider);
 
     _taxTextController.addListener(_togglePriceClearVisible);
     _taxTextController.text = bill.tax.toString();
@@ -55,7 +54,7 @@ class _OtherScreenState extends State<OthersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider);
+    final BillModel bill = ref.watch(billStateNotifierProvider);
     final bool isSplitTaxEqually = bill.isSplitTaxEqually;
 
     return Scaffold(
@@ -114,7 +113,8 @@ class _OtherScreenState extends State<OthersScreen> {
                 },
                 icon: const Icon(
                   Icons.clear,
-                )),
+                ),
+              ),
         labelText: 'Tax',
         errorText: _isTaxValid ? null : 'Should be between 0 and 100',
         contentPadding: const EdgeInsets.all(10.0),

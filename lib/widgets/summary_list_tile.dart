@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -10,7 +8,7 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/pages/summary_guest_details_screen.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
-class SummaryListTile extends HookWidget {
+class SummaryListTile extends HookConsumerWidget {
   SummaryListTile({required this.key, required this.guest});
 
   final Key key;
@@ -19,8 +17,8 @@ class SummaryListTile extends HookWidget {
   final Logger logger = getLogger();
 
   @override
-  Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final BillModel bill = ref.watch(billStateNotifierProvider);
     final String totalAsString = guest.total.toStringAsFixed(2);
     final double totalWithTax = guest.getTotalWithTax(
       isSplitTaxEqually: bill.isSplitTaxEqually,

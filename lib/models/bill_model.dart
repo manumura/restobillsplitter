@@ -49,9 +49,10 @@ class BillModel {
     double totalWithTax = 0.0;
     for (final GuestModel guest in guests) {
       final double guestTotal = guest.getTotalWithTax(
-          isSplitTaxEqually: isSplitTaxEqually,
-          taxAsPercentage: tax,
-          taxAsAmount: taxSplitEqually);
+        isSplitTaxEqually: isSplitTaxEqually,
+        taxAsPercentage: tax,
+        taxAsAmount: taxSplitEqually,
+      );
       totalWithTax += guestTotal;
     }
 

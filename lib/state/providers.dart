@@ -5,6 +5,6 @@ import 'package:restobillsplitter/models/bill_model.dart';
 final StateNotifierProvider<BillStateNotifier, BillModel>
     billStateNotifierProvider =
     StateNotifierProvider<BillStateNotifier, BillModel>(
-        (ProviderReference ref) {
+        (StateNotifierProviderRef<BillStateNotifier, BillModel> ref) {
   return BillStateNotifier();
 });

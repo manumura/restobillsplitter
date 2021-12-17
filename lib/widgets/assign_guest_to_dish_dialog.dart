@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
@@ -7,16 +6,18 @@ import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
-class AssignGuestToDishDialog extends StatefulHookWidget {
+class AssignGuestToDishDialog extends ConsumerStatefulWidget {
   AssignGuestToDishDialog({required this.dish});
 
   final DishModel dish;
 
   @override
-  State<StatefulWidget> createState() => _AssignGuestToDishDialog();
+  _AssignGuestToDishDialogState createState() =>
+      _AssignGuestToDishDialogState();
 }
 
-class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
+class _AssignGuestToDishDialogState
+    extends ConsumerState<AssignGuestToDishDialog> {
   final Map<GuestModel?, bool?> _selectedMap = <GuestModel?, bool?>{};
   bool? _isSelectEveryoneChecked = true;
   late BillStateNotifier billStateNotifier;
@@ -27,8 +28,8 @@ class _AssignGuestToDishDialog extends State<AssignGuestToDishDialog> {
   void initState() {
     super.initState();
 
-    billStateNotifier = context.read(billStateNotifierProvider.notifier);
-    bill = context.read(billStateNotifierProvider);
+    billStateNotifier = ref.read(billStateNotifierProvider.notifier);
+    bill = ref.read(billStateNotifierProvider);
     guests = bill.guests;
 
     for (final GuestModel guest in guests!) {

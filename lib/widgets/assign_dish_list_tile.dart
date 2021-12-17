@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -11,7 +9,7 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/assign_guest_to_dish_dialog.dart';
 
-class AssignDishListTile extends HookWidget {
+class AssignDishListTile extends HookConsumerWidget {
   AssignDishListTile({required this.key, required this.dish});
 
   final Key key;
@@ -20,8 +18,8 @@ class AssignDishListTile extends HookWidget {
   final Logger logger = getLogger();
 
   @override
-  Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final BillModel bill = ref.watch(billStateNotifierProvider);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -59,9 +57,11 @@ class AssignDishListTile extends HookWidget {
             .toList();
 
     if (guests.isNotEmpty) {
-      guestsTextList.add(const SizedBox(
-        height: 5.0,
-      ));
+      guestsTextList.add(
+        const SizedBox(
+          height: 5.0,
+        ),
+      );
 
       guestsTextList.add(
         RichText(
@@ -71,14 +71,18 @@ class AssignDishListTile extends HookWidget {
                 TextSpan(
                   text: i > 0 ? ' ${guests[i].name}' : guests[i].name,
                   style: TextStyle(
-                      color: guests[i].color, fontWeight: FontWeight.bold),
+                    color: guests[i].color,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               TextSpan(
                 text: dish.guestUuids!.length > 1
                     ? ' shared this dish'
                     : ' got this dish',
                 style: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold),
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),

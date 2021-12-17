@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -11,7 +9,7 @@ import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/shared/utils.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
-class DishListTile extends StatefulHookWidget {
+class DishListTile extends ConsumerStatefulWidget {
   DishListTile({required this.key, required this.dish});
 
   final Key key;
@@ -21,7 +19,7 @@ class DishListTile extends StatefulHookWidget {
   _DishListTileState createState() => _DishListTileState();
 }
 
-class _DishListTileState extends State<DishListTile> {
+class _DishListTileState extends ConsumerState<DishListTile> {
   final Logger logger = getLogger();
 
   late BillStateNotifier billStateNotifier;
@@ -38,7 +36,7 @@ class _DishListTileState extends State<DishListTile> {
   void initState() {
     super.initState();
 
-    billStateNotifier = context.read(billStateNotifierProvider.notifier);
+    billStateNotifier = ref.read(billStateNotifierProvider.notifier);
 
     _nameTextController.addListener(_toggleNameClearVisible);
     _nameTextController.text = widget.dish.name;
@@ -83,16 +81,19 @@ class _DishListTileState extends State<DishListTile> {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      actionPane: const SlidableDrawerActionPane(),
-      actionExtentRatio: 0.3,
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: _deleteDish,
-        ),
-      ],
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.3,
+        children: <Widget>[
+          SlidableAction(
+            onPressed: (BuildContext context) => _deleteDish(),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
       child: Row(
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -100,9 +101,7 @@ class _DishListTileState extends State<DishListTile> {
             flex: 20,
             child: _buildNameTextField(widget.dish),
           ),
-          const Spacer(
-            flex: 1,
-          ),
+          const Spacer(),
           Expanded(
             flex: 13,
             child: _buildPriceTextField(widget.dish),
@@ -139,6 +138,10 @@ class _DishListTileState extends State<DishListTile> {
                 ),
               ),
         labelText: 'Name',
+        labelStyle: const TextStyle(
+          fontStyle: FontStyle.italic,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         contentPadding: const EdgeInsets.all(8.0),
         border: const OutlineInputBorder(),
         filled: true,
@@ -186,6 +189,10 @@ class _DishListTileState extends State<DishListTile> {
                 ),
               ),
         labelText: 'Price',
+        labelStyle: const TextStyle(
+          fontStyle: FontStyle.italic,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         contentPadding: const EdgeInsets.all(10.0),
         border: const OutlineInputBorder(),
         filled: true,

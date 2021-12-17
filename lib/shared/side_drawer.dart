@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:restobillsplitter/shared/about_box_children.dart';
@@ -48,7 +47,7 @@ class _SideDrawerState extends State<SideDrawer> {
             applicationIcon: Icon(
               Icons.attach_money_rounded,
               size: 65,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
             applicationName: _packageInfo.appName,
             applicationVersion: _packageInfo.version,

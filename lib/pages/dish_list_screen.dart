@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:restobillsplitter/bloc/bill_state_notifier.dart';
 import 'package:restobillsplitter/models/bill_model.dart';
@@ -10,14 +9,14 @@ import 'package:restobillsplitter/shared/side_drawer.dart';
 import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/dish_list_tile.dart';
 
-class DishListScreen extends StatefulHookWidget {
+class DishListScreen extends ConsumerStatefulWidget {
   static const String routeName = '/dish_list';
 
   @override
   _DishListScreenState createState() => _DishListScreenState();
 }
 
-class _DishListScreenState extends State<DishListScreen> {
+class _DishListScreenState extends ConsumerState<DishListScreen> {
   ScrollController? _scrollController;
   bool _isFabVisible = true;
 
@@ -43,7 +42,7 @@ class _DishListScreenState extends State<DishListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BillModel bill = useProvider(billStateNotifierProvider);
+    final BillModel bill = ref.watch(billStateNotifierProvider);
     final List<DishModel> dishes = bill.dishes;
 
     return Scaffold(
@@ -61,7 +60,9 @@ class _DishListScreenState extends State<DishListScreen> {
               itemBuilder: (BuildContext context, int index) {
                 final DishModel dish = dishes[index];
                 return DishListTile(
-                    key: ValueKey<String>(dish.uuid), dish: dish);
+                  key: ValueKey<String>(dish.uuid),
+                  dish: dish,
+                );
               },
               itemCount: dishes.length,
               separatorBuilder: (BuildContext context, int index) =>
@@ -83,7 +84,7 @@ class _DishListScreenState extends State<DishListScreen> {
 
   void _addDish(BuildContext context) {
     final BillStateNotifier billStateNotifier =
-        context.read(billStateNotifierProvider.notifier);
+        ref.read(billStateNotifierProvider.notifier);
     billStateNotifier.addDish();
   }
 }

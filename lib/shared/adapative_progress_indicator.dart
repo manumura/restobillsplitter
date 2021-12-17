@@ -8,8 +8,9 @@ class AdaptiveProgressIndicator extends StatelessWidget {
         ? const CupertinoActivityIndicator()
         : CircularProgressIndicator(
             backgroundColor: Colors.indigo[100],
-            valueColor:
-                AlwaysStoppedAnimation<Color>(Theme.of(context).accentColor),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              Theme.of(context).colorScheme.secondary,
+            ),
           );
   }
 }
