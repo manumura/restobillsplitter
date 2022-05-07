@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -80,7 +78,7 @@ class _GuestListTileState extends ConsumerState<GuestListTile> {
           Flexible(
             flex: 3,
             child: Icon(
-              FontAwesomeIcons.userAlt,
+              FontAwesomeIcons.userLarge,
               color: widget.guest.color,
             ),
             // child: CircleAvatar(

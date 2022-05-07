@@ -98,11 +98,11 @@ class _SummaryScreenState extends ConsumerState<SummaryScreen> {
             ),
       onPressed: _isLoading || bill.guests.isEmpty || bill.dishes.isEmpty
           ? null
-          : () => _exportToCsv(context, bill),
+          : () => _exportToCsv(bill),
     );
   }
 
-  Future<void> _exportToCsv(BuildContext context, BillModel bill) async {
+  Future<void> _exportToCsv(BillModel bill) async {
     setState(() => _isLoading = true);
     final List<List<dynamic>?> rows = <List<dynamic>?>[];
 
@@ -194,6 +194,7 @@ class _SummaryScreenState extends ConsumerState<SummaryScreen> {
     final String csv = const ListToCsvConverter().convert(rows);
     file.writeAsString(csv);
 
+    if (!mounted) return;
     final RenderBox? box = context.findRenderObject() as RenderBox?;
     if (box == null) {
       logger.d('Cannot find render box');

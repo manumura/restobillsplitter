@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:restobillsplitter/shared/app_bar.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   PrivacyPolicyScreen();
@@ -26,8 +26,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
   }
 
   Future<void> _launchURL(String text, String? href, String title) async {
-    if (await canLaunch(href!)) {
-      await launch(href);
+    if (await canLaunchUrlString(href!)) {
+      await launchUrlString(href);
     } else {
       throw 'Could not launch $href';
     }

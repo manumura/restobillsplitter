@@ -78,7 +78,7 @@ class _HomeScreenScreenState extends State<HomeScreen>
             },
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.userEdit),
+                icon: Icon(FontAwesomeIcons.userPen),
                 label: 'Guests',
               ),
               BottomNavigationBarItem(
@@ -86,7 +86,7 @@ class _HomeScreenScreenState extends State<HomeScreen>
                 label: 'Dishes',
               ),
               BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.peopleArrows),
+                icon: Icon(FontAwesomeIcons.peopleArrowsLeftRight),
                 label: 'Assign',
               ),
               BottomNavigationBarItem(

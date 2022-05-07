@@ -99,7 +99,7 @@ class AssignDishListTile extends HookConsumerWidget {
         : Colors.black26;
     return IconButton(
       icon: Icon(
-        FontAwesomeIcons.userEdit,
+        FontAwesomeIcons.userPen,
         color: color,
       ),
       onPressed: () => _openAssignGuestToDishDialog(context, dish),
