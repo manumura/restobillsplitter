@@ -19,6 +19,7 @@ import 'package:restobillsplitter/pages/summary_screen.dart';
 import 'package:restobillsplitter/pages/terms_and_conditions_screen.dart';
 import 'package:restobillsplitter/shared/adaptive_theme.dart';
 
+// TODO app check + Missing google_app_id. Firebase Analytics disabled
 void main() async {
   runZonedGuarded<Future<void>>(() async {
     WidgetsFlutterBinding.ensureInitialized();
