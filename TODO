@@ -11,6 +11,13 @@
 // https://www.ps2pdf.com/resize-png
 // #424242 #e0e0e0
 
-// https://pub.dev/packages/flutter_native_splash
-// flutter pub run flutter_native_splash:create
-// flutter pub run flutter_native_splash:remove
+flutterfire configure \
+  --project=resto-bill-splitter-dev \
+  --out=lib/firebase_options_dev.dart \
+  --ios-bundle-id=com.manolo.restobillsplitter.dev \
+  --macos-bundle-id=com.manolo.restobillsplitter.dev \
+  --android-package-name=com.manolo.restobillsplitter.dev
+
+flutter build apk --flavor dev --dart-define=ENVIRONMENT=dev
+
+flutter build appbundle --flavor prod --dart-define=ENVIRONMENT=prod

@@ -148,7 +148,7 @@ class _DishListTileState extends ConsumerState<DishListTile> {
         fillColor: Colors.white,
       ),
       onEditingComplete: () {
-        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
     );
   }
@@ -199,7 +199,7 @@ class _DishListTileState extends ConsumerState<DishListTile> {
         fillColor: Colors.white,
       ),
       onEditingComplete: () {
-        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
       onTap: () {
         final double price = parseDouble(_priceTextController.text);

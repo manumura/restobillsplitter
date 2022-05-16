@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/flutter-resto-bill-splitter.iml" filepath="$PROJECT_DIR$/.idea/flutter-resto-bill-splitter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/restobillsplitter.iml" filepath="$PROJECT_DIR$/restobillsplitter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/restobillsplitter_android.iml" filepath="$PROJECT_DIR$/android/restobillsplitter_android.iml" />
     </modules>
   </component>
 </project>

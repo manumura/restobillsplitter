@@ -35,7 +35,16 @@ class BillStateNotifier extends StateNotifier<BillModel> {
       color: color,
       dishes: <DishModel>[],
     );
-    state = state..guests.add(guestToAdd);
+
+    final List<GuestModel> newGuests = List<GuestModel>.from(state.guests);
+    newGuests.add(guestToAdd);
+
+    state = BillModel(
+      guests: newGuests,
+      dishes: state.dishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
   }
 
   void editGuest(GuestModel guest) {
@@ -125,7 +134,16 @@ class BillStateNotifier extends StateNotifier<BillModel> {
     _nextDishIndex++;
     final DishModel dishToAdd =
         DishModel(uuid: uuid.v4(), name: 'Dish$nextIndex', price: 0.0);
-    state = state..dishes.add(dishToAdd);
+
+    final List<DishModel> newDishes = List<DishModel>.from(state.dishes);
+    newDishes.add(dishToAdd);
+
+    state = BillModel(
+      guests: state.guests,
+      dishes: newDishes,
+      tax: state.tax,
+      isSplitTaxEqually: state.isSplitTaxEqually,
+    );
   }
 
   void editDish(DishModel dish) {

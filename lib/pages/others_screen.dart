@@ -75,6 +75,10 @@ class _OtherScreenState extends ConsumerState<OthersScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: _buildSplitEquallySwitch(isSplitTaxEqually),
           ),
+          // TextButton(
+          //   onPressed: () => throw Exception(),
+          //   child: const Text("Throw Test Exception"),
+          // ),
         ],
       ),
     );
@@ -123,7 +127,7 @@ class _OtherScreenState extends ConsumerState<OthersScreen> {
         fillColor: Colors.white,
       ),
       onEditingComplete: () {
-        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
       onTap: () {
         final double tax = parseDouble(_taxTextController.text);

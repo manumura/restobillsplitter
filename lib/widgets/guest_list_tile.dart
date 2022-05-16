@@ -138,7 +138,7 @@ class _GuestListTileState extends ConsumerState<GuestListTile> {
         // floatingLabelBehavior: FloatingLabelBehavior.never,
       ),
       onEditingComplete: () {
-        WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
+        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
     );
   }
