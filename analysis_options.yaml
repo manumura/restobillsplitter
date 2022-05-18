@@ -23,10 +23,10 @@ analyzer:
     implicit-dynamic: false
 
   exclude:
-    - '**/*.gr.dart'
-    - '**/*.iconfig.dart'
-    - '**/*.g.dart'
-    - '/**/*.freezed.dart'
+    - '**.gr.dart'
+    - '**.config.dart'
+    - '**.g.dart'
+    - '**.freezed.dart'
 
 linter:
   # The lint rules applied to this project can be customized in the
