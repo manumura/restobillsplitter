@@ -8,6 +8,9 @@
       </map>
     </option>
   </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <type id="android" />
+  </component>
   <component name="ProjectType">
     <option name="id" value="jpab" />
   </component>

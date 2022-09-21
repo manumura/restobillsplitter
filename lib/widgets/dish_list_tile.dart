@@ -10,13 +10,12 @@ import 'package:restobillsplitter/shared/utils.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class DishListTile extends ConsumerStatefulWidget {
-  DishListTile({required this.key, required this.dish});
+  const DishListTile({required super.key, required this.dish});
 
-  final Key key;
   final DishModel dish;
 
   @override
-  _DishListTileState createState() => _DishListTileState();
+  ConsumerState<DishListTile> createState() => _DishListTileState();
 }
 
 class _DishListTileState extends ConsumerState<DishListTile> {
