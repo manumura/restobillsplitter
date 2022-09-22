@@ -76,6 +76,7 @@ class _GuestListScreenState extends ConsumerState<GuestListScreen> {
         child: FloatingActionButton(
           onPressed: () => _addGuest(context),
           child: const Icon(Icons.add),
+          tooltip: 'Add a guest',
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
