@@ -9,7 +9,7 @@ import firebase_analytics
 import firebase_core
 import firebase_crashlytics
 import package_info
-import path_provider_macos
+import path_provider_foundation
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
