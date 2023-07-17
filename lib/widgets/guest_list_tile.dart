@@ -15,7 +15,7 @@ class GuestListTile extends ConsumerStatefulWidget {
   final GuestModel guest;
 
   @override
-  _GuestListTileState createState() => _GuestListTileState();
+  ConsumerState<GuestListTile> createState() => _GuestListTileState();
 }
 
 class _GuestListTileState extends ConsumerState<GuestListTile> {

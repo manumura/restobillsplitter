@@ -21,7 +21,7 @@ class SummaryScreen extends ConsumerStatefulWidget {
   static const String routeName = '/summary';
 
   @override
-  _SummaryScreenState createState() => _SummaryScreenState();
+  ConsumerState<SummaryScreen> createState() => _SummaryScreenState();
 }
 
 class _SummaryScreenState extends ConsumerState<SummaryScreen> {

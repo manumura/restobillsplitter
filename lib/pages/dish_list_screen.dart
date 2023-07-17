@@ -13,7 +13,7 @@ class DishListScreen extends ConsumerStatefulWidget {
   static const String routeName = '/dish_list';
 
   @override
-  _DishListScreenState createState() => _DishListScreenState();
+  ConsumerState<DishListScreen> createState() => _DishListScreenState();
 }
 
 class _DishListScreenState extends ConsumerState<DishListScreen> {

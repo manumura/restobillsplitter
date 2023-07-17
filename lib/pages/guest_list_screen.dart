@@ -13,7 +13,7 @@ class GuestListScreen extends ConsumerStatefulWidget {
   static const String routeName = '/guest_list';
 
   @override
-  _GuestListScreenState createState() => _GuestListScreenState();
+  ConsumerState<GuestListScreen> createState() => _GuestListScreenState();
 }
 
 class _GuestListScreenState extends ConsumerState<GuestListScreen> {
@@ -75,8 +75,8 @@ class _GuestListScreenState extends ConsumerState<GuestListScreen> {
         opacity: _isFabVisible ? 1 : 0,
         child: FloatingActionButton(
           onPressed: () => _addGuest(context),
-          child: const Icon(Icons.add),
           tooltip: 'Add a guest',
+          child: const Icon(Icons.add),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

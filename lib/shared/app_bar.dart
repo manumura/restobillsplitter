@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class CustomAppBar extends HookWidget with PreferredSizeWidget {
+class CustomAppBar extends HookWidget implements PreferredSizeWidget {
   const CustomAppBar(this.title, [this.actions = const <Widget>[]]);
 
   final Widget title;

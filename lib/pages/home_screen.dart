@@ -13,7 +13,7 @@ class HomeScreen extends StatefulHookWidget {
   static const String routeName = '/';
 
   @override
-  _HomeScreenScreenState createState() => _HomeScreenScreenState();
+  State<HomeScreen> createState() => _HomeScreenScreenState();
 }
 
 class _HomeScreenScreenState extends State<HomeScreen>
@@ -86,7 +86,7 @@ class _HomeScreenScreenState extends State<HomeScreen>
                 label: 'Dishes',
               ),
               BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.peopleArrowsLeftRight),
+                icon: Icon(FontAwesomeIcons.peopleArrows),
                 label: 'Assign',
               ),
               BottomNavigationBarItem(

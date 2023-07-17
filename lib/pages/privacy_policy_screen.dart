@@ -91,7 +91,7 @@ Last updated December 29, 2020
       data: markDown,
       onTapLink: _launchURL,
       styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-        h2: Theme.of(context).textTheme.headline6!.copyWith(
+        h2: Theme.of(context).textTheme.titleLarge!.copyWith(
               color: Colors.black,
             ),
       ),

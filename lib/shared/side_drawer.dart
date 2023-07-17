@@ -5,7 +5,7 @@ import 'package:restobillsplitter/shared/global_config.dart';
 
 class SideDrawer extends StatefulWidget {
   @override
-  _SideDrawerState createState() => _SideDrawerState();
+  State<SideDrawer> createState() => _SideDrawerState();
 }
 
 class _SideDrawerState extends State<SideDrawer> {

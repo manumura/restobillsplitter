@@ -15,7 +15,7 @@ class OthersScreen extends ConsumerStatefulWidget {
   static const String routeName = '/others';
 
   @override
-  _OtherScreenState createState() => _OtherScreenState();
+  ConsumerState<OthersScreen> createState() => _OtherScreenState();
 }
 
 class _OtherScreenState extends ConsumerState<OthersScreen> {

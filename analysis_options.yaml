@@ -18,10 +18,6 @@ analyzer:
     avoid_print: warning
     todo: warning
 
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
-
   exclude:
     - '**.gr.dart'
     - '**.config.dart'

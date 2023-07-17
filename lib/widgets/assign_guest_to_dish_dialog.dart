@@ -12,7 +12,7 @@ class AssignGuestToDishDialog extends ConsumerStatefulWidget {
   final DishModel dish;
 
   @override
-  _AssignGuestToDishDialogState createState() =>
+  ConsumerState<AssignGuestToDishDialog> createState() =>
       _AssignGuestToDishDialogState();
 }
 
