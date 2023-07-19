@@ -18,6 +18,10 @@ analyzer:
     avoid_print: warning
     todo: warning
 
+  language:
+    strict-casts: true
+    strict-raw-types: true
+
   exclude:
     - '**.gr.dart'
     - '**.config.dart'
