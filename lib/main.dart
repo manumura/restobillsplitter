@@ -33,7 +33,7 @@ void main() async {
     FlutterError.onError =
         FirebaseCrashlytics.instance.recordFlutterFatalError;
 
-    Logger.level = Level.nothing; // nothing / debug
+    Logger.level = Level.off; // off / debug
 
     runApp(
       ProviderScope(
