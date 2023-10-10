@@ -12,6 +12,8 @@ import 'package:restobillsplitter/shared/utils.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class OthersScreen extends ConsumerStatefulWidget {
+  const OthersScreen({super.key});
+
   static const String routeName = '/others';
 
   @override
@@ -58,7 +60,7 @@ class _OtherScreenState extends ConsumerState<OthersScreen> {
     final bool isSplitTaxEqually = bill.isSplitTaxEqually;
 
     return Scaffold(
-      drawer: SideDrawer(),
+      drawer: const SideDrawer(),
       appBar: const CustomAppBar(
         Text('Others'),
       ),

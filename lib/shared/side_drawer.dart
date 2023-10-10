@@ -4,6 +4,8 @@ import 'package:restobillsplitter/shared/about_box_children.dart';
 import 'package:restobillsplitter/shared/global_config.dart';
 
 class SideDrawer extends StatefulWidget {
+  const SideDrawer({super.key});
+
   @override
   State<SideDrawer> createState() => _SideDrawerState();
 }

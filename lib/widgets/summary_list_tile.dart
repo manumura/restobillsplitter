@@ -9,9 +9,8 @@ import 'package:restobillsplitter/pages/summary_guest_details_screen.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class SummaryListTile extends HookConsumerWidget {
-  SummaryListTile({required this.key, required this.guest});
+  SummaryListTile({super.key, required this.guest});
 
-  final Key key;
   final GuestModel guest;
 
   final Logger logger = getLogger();

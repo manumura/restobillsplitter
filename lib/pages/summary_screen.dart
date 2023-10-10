@@ -18,6 +18,8 @@ import 'package:restobillsplitter/widgets/summary_list_tile.dart';
 import 'package:share/share.dart';
 
 class SummaryScreen extends ConsumerStatefulWidget {
+  const SummaryScreen({super.key});
+
   static const String routeName = '/summary';
 
   @override
@@ -38,7 +40,7 @@ class _SummaryScreenState extends ConsumerState<SummaryScreen> {
         bill.totalWithTaxToSplit.toStringAsFixed(2);
 
     return Scaffold(
-      drawer: SideDrawer(),
+      drawer: const SideDrawer(),
       appBar: CustomAppBar(
         _buildTitle(totalAsString, totalSplitAsString),
         <Widget>[

@@ -10,6 +10,8 @@ import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/assign_dish_list_tile.dart';
 
 class AssignScreen extends HookConsumerWidget {
+  AssignScreen({super.key});
+
   static const String routeName = '/assign';
 
   final Logger logger = getLogger();
@@ -20,7 +22,7 @@ class AssignScreen extends HookConsumerWidget {
     final List<DishModel> dishes = bill.dishes;
 
     return Scaffold(
-      drawer: SideDrawer(),
+      drawer: const SideDrawer(),
       appBar: const CustomAppBar(
         Text('Assign guests to dishes'),
       ),

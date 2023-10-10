@@ -4,7 +4,7 @@ import 'package:restobillsplitter/shared/app_bar.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
-  PrivacyPolicyScreen();
+  const PrivacyPolicyScreen({super.key});
 
   static const String routeName = '/privacy_policy';
 

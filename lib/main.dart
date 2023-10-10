@@ -25,13 +25,13 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     const String env = String.fromEnvironment('ENVIRONMENT', defaultValue: '');
-    final FirebaseOptions firebaseOptions = _getFirebaseOptions(environment: env);
+    final FirebaseOptions firebaseOptions =
+        _getFirebaseOptions(environment: env);
     await Firebase.initializeApp(
       options: firebaseOptions,
     );
 
-    FlutterError.onError =
-        FirebaseCrashlytics.instance.recordFlutterFatalError;
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
     Logger.level = Level.off; // off / debug
 
@@ -40,9 +40,9 @@ void main() async {
         child: MyApp(),
       ),
     );
-
-  }, (Object error, StackTrace stackTrace) =>
-      FirebaseCrashlytics.instance.recordError(error, stackTrace, fatal: true));
+  },
+      (Object error, StackTrace stackTrace) => FirebaseCrashlytics.instance
+          .recordError(error, stackTrace, fatal: true));
 }
 
 FirebaseOptions _getFirebaseOptions({required String environment}) {
@@ -59,19 +59,21 @@ FirebaseOptions _getFirebaseOptions({required String environment}) {
 }
 
 class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
   final Logger logger = getLogger();
   final FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.instance;
 
   // Set routes to use in Navigator
   final Map<String, Widget> routes = <String, Widget>{
-    HomeScreen.routeName: HomeScreen(),
-    GuestListScreen.routeName: GuestListScreen(),
-    DishListScreen.routeName: DishListScreen(),
+    HomeScreen.routeName: const HomeScreen(),
+    GuestListScreen.routeName: const GuestListScreen(),
+    DishListScreen.routeName: const DishListScreen(),
     AssignScreen.routeName: AssignScreen(),
-    OthersScreen.routeName: OthersScreen(),
-    SummaryScreen.routeName: SummaryScreen(),
-    PrivacyPolicyScreen.routeName: PrivacyPolicyScreen(),
-    TermsAndConditionsScreen.routeName: TermsAndConditionsScreen(),
+    OthersScreen.routeName: const OthersScreen(),
+    SummaryScreen.routeName: const SummaryScreen(),
+    PrivacyPolicyScreen.routeName: const PrivacyPolicyScreen(),
+    TermsAndConditionsScreen.routeName: const TermsAndConditionsScreen(),
   };
 
   @override
@@ -88,35 +90,35 @@ class MyApp extends StatelessWidget {
         // home: Scaffold(
         //   body: HomeScreen(),
         // ),
-        home: HomeScreen(),
+        home: const HomeScreen(),
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case '/':
               return MaterialPageRoute<void>(
-                builder: (BuildContext context) => HomeScreen(),
+                builder: (BuildContext context) => const HomeScreen(),
               );
             default:
               return PageRouteBuilder<Widget>(
                 pageBuilder: (
-                    BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                    ) {
+                  BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                ) {
                   return routes[settings.name!]!;
                 },
                 transitionsBuilder: (
-                    BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                    Widget child,
-                    ) {
+                  BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                  Widget child,
+                ) {
                   const Offset begin = Offset(0.0, 1.0);
                   const Offset end = Offset.zero;
                   const Cubic curve = Curves.ease;
 
                   final Animatable<Offset> tween =
-                  Tween<Offset>(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
+                      Tween<Offset>(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
 
                   return SlideTransition(
                     position: animation.drive(tween),

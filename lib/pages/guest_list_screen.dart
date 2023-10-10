@@ -10,6 +10,8 @@ import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/guest_list_tile.dart';
 
 class GuestListScreen extends ConsumerStatefulWidget {
+  const GuestListScreen({super.key});
+
   static const String routeName = '/guest_list';
 
   @override
@@ -46,7 +48,7 @@ class _GuestListScreenState extends ConsumerState<GuestListScreen> {
     final List<GuestModel> guests = bill.guests;
 
     return Scaffold(
-      drawer: SideDrawer(),
+      drawer: const SideDrawer(),
       appBar: const CustomAppBar(
         Text('Guests'),
       ),

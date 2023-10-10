@@ -9,9 +9,8 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class GuestListTile extends ConsumerStatefulWidget {
-  GuestListTile({required this.key, required this.guest});
+  const GuestListTile({super.key, required this.guest});
 
-  final Key key;
   final GuestModel guest;
 
   @override

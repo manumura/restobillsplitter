@@ -10,9 +10,8 @@ import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/assign_guest_to_dish_dialog.dart';
 
 class AssignDishListTile extends HookConsumerWidget {
-  AssignDishListTile({required this.key, required this.dish});
+  AssignDishListTile({super.key, required this.dish});
 
-  final Key key;
   final DishModel dish;
 
   final Logger logger = getLogger();

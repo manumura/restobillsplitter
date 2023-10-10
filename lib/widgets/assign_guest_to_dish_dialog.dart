@@ -7,7 +7,7 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/state/providers.dart';
 
 class AssignGuestToDishDialog extends ConsumerStatefulWidget {
-  AssignGuestToDishDialog({required this.dish});
+  const AssignGuestToDishDialog({super.key, required this.dish});
 
   final DishModel dish;
 

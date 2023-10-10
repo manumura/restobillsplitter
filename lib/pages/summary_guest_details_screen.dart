@@ -7,7 +7,7 @@ import 'package:restobillsplitter/models/guest_model.dart';
 import 'package:restobillsplitter/shared/app_bar.dart';
 
 class SummaryGuestDetailsScreen extends HookWidget {
-  SummaryGuestDetailsScreen(this.guest);
+  SummaryGuestDetailsScreen(this.guest, {super.key});
 
   static const String routeName = '/summary_guest_detail';
 

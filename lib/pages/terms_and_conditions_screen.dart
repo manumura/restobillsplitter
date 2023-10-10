@@ -3,7 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:restobillsplitter/shared/app_bar.dart';
 
 class TermsAndConditionsScreen extends StatelessWidget {
-  TermsAndConditionsScreen();
+  const TermsAndConditionsScreen({super.key});
 
   static const String routeName = '/terms_conditions';
 

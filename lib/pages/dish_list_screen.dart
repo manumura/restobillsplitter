@@ -10,6 +10,8 @@ import 'package:restobillsplitter/state/providers.dart';
 import 'package:restobillsplitter/widgets/dish_list_tile.dart';
 
 class DishListScreen extends ConsumerStatefulWidget {
+  const DishListScreen({super.key});
+
   static const String routeName = '/dish_list';
 
   @override
@@ -46,7 +48,7 @@ class _DishListScreenState extends ConsumerState<DishListScreen> {
     final List<DishModel> dishes = bill.dishes;
 
     return Scaffold(
-      drawer: SideDrawer(),
+      drawer: const SideDrawer(),
       appBar: const CustomAppBar(
         Text('Dishes'),
       ),
