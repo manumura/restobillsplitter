@@ -12,10 +12,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget body = _buildBody(context);
 
-    return WillPopScope(
-      onWillPop: () {
-        return Future<bool>.value(true);
-      },
+    // https://docs.flutter.dev/release/breaking-changes/android-predictive-back#summary
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (bool didPop) {},
       child: Scaffold(
         appBar: const CustomAppBar(
           Text('Privacy Policy'),
