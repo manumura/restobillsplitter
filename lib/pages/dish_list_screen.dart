@@ -50,7 +50,7 @@ class _DishListScreenState extends ConsumerState<DishListScreen> {
     return Scaffold(
       drawer: const SideDrawer(),
       appBar: const CustomAppBar(
-        Text('Dishes'),
+        title: Text('Dishes'),
       ),
       body: dishes.isEmpty
           ? const Center(

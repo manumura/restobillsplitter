@@ -54,8 +54,8 @@ List<Widget> buildAboutBoxChildren(BuildContext context) {
     ),
     TextButton(
       style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.resolveWith(
-          (Set<MaterialState> states) => Theme.of(context).primaryColor,
+        foregroundColor: WidgetStateProperty.resolveWith(
+          (Set<WidgetState> states) => Theme.of(context).primaryColor,
         ),
       ),
       onPressed: () {
@@ -67,8 +67,8 @@ List<Widget> buildAboutBoxChildren(BuildContext context) {
     ),
     TextButton(
       style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.resolveWith(
-          (Set<MaterialState> states) => Theme.of(context).primaryColor,
+        foregroundColor: WidgetStateProperty.resolveWith(
+          (Set<WidgetState> states) => Theme.of(context).primaryColor,
         ),
       ),
       onPressed: () {

@@ -62,7 +62,7 @@ class _OtherScreenState extends ConsumerState<OthersScreen> {
     return Scaffold(
       drawer: const SideDrawer(),
       appBar: const CustomAppBar(
-        Text('Others'),
+        title: Text('Others'),
       ),
       body: ListView(
         children: <Widget>[

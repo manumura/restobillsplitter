@@ -42,8 +42,8 @@ class _SummaryScreenState extends ConsumerState<SummaryScreen> {
     return Scaffold(
       drawer: const SideDrawer(),
       appBar: CustomAppBar(
-        _buildTitle(totalAsString, totalSplitAsString),
-        <Widget>[
+        title: _buildTitle(totalAsString, totalSplitAsString),
+        actions: <Widget>[
           _buildCsvExportButton(bill),
         ],
       ),

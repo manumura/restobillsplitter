@@ -4,7 +4,6 @@ import 'package:restobillsplitter/models/dish_model.dart';
 import 'package:restobillsplitter/models/guest_model.dart';
 
 void main() {
-
   late BillStateNotifier billStateNotifier;
 
   setUp(() async {
@@ -17,8 +16,8 @@ void main() {
       billStateNotifier.addGuest();
 
       // final BillModel bill = billStateNotifier.state;
-      expect(billStateNotifier.state.guests, isNotEmpty);
-      final GuestModel guest1 = billStateNotifier.state.guests[0];
+      expect(billStateNotifier.guests, isNotEmpty);
+      final GuestModel guest1 = billStateNotifier.guests[0];
       expect(guest1, isNotNull);
       expect(guest1.name, 'Guest1');
       expect(guest1.uuid, isNotNull);
@@ -26,11 +25,16 @@ void main() {
       expect(guest1.dishes, <DishModel>[]);
 
       // Edit
-      final GuestModel guestToEdit = GuestModel(uuid: guest1.uuid, name: 'Guest1!!!', color: guest1.color, dishes: <DishModel>[],);
+      final GuestModel guestToEdit = GuestModel(
+        uuid: guest1.uuid,
+        name: 'Guest1!!!',
+        color: guest1.color,
+        dishes: <DishModel>[],
+      );
       billStateNotifier.editGuest(guestToEdit);
 
-      expect(billStateNotifier.state.guests, isNotEmpty);
-      final GuestModel guest1Edited = billStateNotifier.state.guests[0];
+      expect(billStateNotifier.guests, isNotEmpty);
+      final GuestModel guest1Edited = billStateNotifier.guests[0];
       expect(guest1Edited, isNotNull);
       expect(guest1Edited.name, 'Guest1!!!');
       expect(guest1Edited.uuid, isNotNull);
@@ -40,7 +44,7 @@ void main() {
       // Remove
       billStateNotifier.removeGuest(guestToEdit);
 
-      expect(billStateNotifier.state.guests, isEmpty);
+      expect(billStateNotifier.guests, isEmpty);
     });
 
     test('should add,edit,remove dish successfully', () async {
@@ -48,8 +52,8 @@ void main() {
       billStateNotifier.addDish();
 
       // final BillModel bill = billStateNotifier.state;
-      expect(billStateNotifier.state.dishes, isNotEmpty);
-      final DishModel dish1 = billStateNotifier.state.dishes[0];
+      expect(billStateNotifier.dishes, isNotEmpty);
+      final DishModel dish1 = billStateNotifier.dishes[0];
       expect(dish1, isNotNull);
       expect(dish1.name, 'Dish1');
       expect(dish1.uuid, isNotNull);
@@ -57,11 +61,16 @@ void main() {
       expect(dish1.guestUuids, isNull);
 
       // Edit
-      final DishModel dishToEdit = DishModel(uuid: dish1.uuid, name: 'Dish1!!!', price: 1.0, guestUuids: <String>[],);
+      final DishModel dishToEdit = DishModel(
+        uuid: dish1.uuid,
+        name: 'Dish1!!!',
+        price: 1.0,
+        guestUuids: <String>[],
+      );
       billStateNotifier.editDish(dishToEdit);
 
-      expect(billStateNotifier.state.dishes, isNotEmpty);
-      final DishModel dish1Edited = billStateNotifier.state.dishes[0];
+      expect(billStateNotifier.dishes, isNotEmpty);
+      final DishModel dish1Edited = billStateNotifier.dishes[0];
       expect(dish1Edited, isNotNull);
       expect(dish1Edited.name, 'Dish1!!!');
       expect(dish1Edited.uuid, isNotNull);
@@ -71,7 +80,7 @@ void main() {
       // Remove
       billStateNotifier.removeDish(dishToEdit);
 
-      expect(billStateNotifier.state.dishes, isEmpty);
+      expect(billStateNotifier.dishes, isEmpty);
     });
 
     test('should assign guest to dish successfully', () async {
@@ -82,16 +91,17 @@ void main() {
         billStateNotifier.addGuest();
       }
 
-      expect(billStateNotifier.state.dishes, isNotEmpty);
-      expect(billStateNotifier.state.dishes.length, 1);
-      expect(billStateNotifier.state.guests, isNotEmpty);
-      expect(billStateNotifier.state.guests.length, 2);
+      expect(billStateNotifier.dishes, isNotEmpty);
+      expect(billStateNotifier.dishes.length, 1);
+      expect(billStateNotifier.guests, isNotEmpty);
+      expect(billStateNotifier.guests.length, 2);
 
-      billStateNotifier.assignGuestsToDish(billStateNotifier.state.dishes[0], billStateNotifier.state.guests);
+      billStateNotifier.assignGuestsToDish(
+          billStateNotifier.dishes[0], billStateNotifier.guests);
 
-      final DishModel dish = billStateNotifier.state.dishes[0];
-      final GuestModel guest1 = billStateNotifier.state.guests[0];
-      final GuestModel guest2 = billStateNotifier.state.guests[1];
+      final DishModel dish = billStateNotifier.dishes[0];
+      final GuestModel guest1 = billStateNotifier.guests[0];
+      final GuestModel guest2 = billStateNotifier.guests[1];
 
       expect(dish.guestUuids, <String>[guest1.uuid, guest2.uuid]);
       expect(guest1.dishes, <DishModel>[dish]);
@@ -100,13 +110,12 @@ void main() {
 
     test('should edit tax successfully', () async {
       billStateNotifier.editTax(22.0);
-      expect(billStateNotifier.state.tax, 22.0);
+      expect(billStateNotifier.tax, 22.0);
     });
 
     test('should edit split tax equally successfully', () async {
       billStateNotifier.editSplitTaxEqually(isSplitTaxEqually: true);
-      expect(billStateNotifier.state.isSplitTaxEqually, true);
+      expect(billStateNotifier.isSplitTaxEqually, true);
     });
-
   });
 }

@@ -50,7 +50,7 @@ class _GuestListScreenState extends ConsumerState<GuestListScreen> {
     return Scaffold(
       drawer: const SideDrawer(),
       appBar: const CustomAppBar(
-        Text('Guests'),
+        title: Text('Guests'),
       ),
       body: guests.isEmpty
           ? const Center(

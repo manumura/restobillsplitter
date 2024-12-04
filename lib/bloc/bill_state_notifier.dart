@@ -24,6 +24,11 @@ class BillStateNotifier extends StateNotifier<BillModel> {
   int _nextGuestIndex = 1;
   int _nextDishIndex = 1;
 
+  List<GuestModel> get guests => state.guests;
+  List<DishModel> get dishes => state.dishes;
+  double get tax => state.tax;
+  bool get isSplitTaxEqually => state.isSplitTaxEqually;
+
   void addGuest() {
     final int nextIndex = _nextGuestIndex;
     _nextGuestIndex++;

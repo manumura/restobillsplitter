@@ -18,7 +18,7 @@ class SummaryGuestDetailsScreen extends HookWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        Text(guest.name),
+        title: Text(guest.name),
       ),
       body: guest.dishes.isEmpty
           ? const Center(

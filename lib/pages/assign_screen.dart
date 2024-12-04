@@ -24,7 +24,7 @@ class AssignScreen extends HookConsumerWidget {
     return Scaffold(
       drawer: const SideDrawer(),
       appBar: const CustomAppBar(
-        Text('Assign guests to dishes'),
+        title: Text('Assign guests to dishes'),
       ),
       body: dishes.isEmpty
           ? const Center(

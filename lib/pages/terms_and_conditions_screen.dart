@@ -14,10 +14,10 @@ class TermsAndConditionsScreen extends StatelessWidget {
     // https://docs.flutter.dev/release/breaking-changes/android-predictive-back#summary
     return PopScope(
       canPop: true,
-      onPopInvoked: (bool didPop) {},
+      onPopInvokedWithResult: (bool didPop, dynamic result) {},
       child: Scaffold(
         appBar: const CustomAppBar(
-          Text('Terms & Conditions'),
+          title: Text('Terms & Conditions'),
         ),
         body: body,
       ),
